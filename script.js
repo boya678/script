@@ -10,67 +10,71 @@ function wait(ms) {
 
 async function fetchCveData(cveId) {
     const options = {
-      hostname: 'services.nvd.nist.gov',
-      path: `/rest/json/cves/2.0?cveId=${cveId}`,
-      method: 'GET',
-      headers: {
-        'apiKey': "0707a7f1-a0ec-4e63-af05-01ca64b78f14" // Incluye la API Key en los encabezados
-      }
+        hostname: 'services.nvd.nist.gov',
+        path: `/rest/json/cves/2.0?cveId=${cveId}`,
+        method: 'GET',
+        headers: {
+            'apiKey': "0707a7f1-a0ec-4e63-af05-01ca64b78f14" // Incluye la API Key en los encabezados
+        }
     };
-  
+
     return new Promise((resolve, reject) => {
-      const req = https.request(options, (res) => {
-        let data = '';
-  
-        res.on('data', (chunk) => {
-          data += chunk;
+        const req = https.request(options, (res) => {
+            let data = '';
+
+            res.on('data', (chunk) => {
+                data += chunk;
+            });
+
+            res.on('end', () => {
+                try {
+                    const jsonData = JSON.parse(data);
+                    resolve(jsonData);
+                } catch (error) {
+                    reject(`Error parsing JSON: ${error.message}`);
+                }
+            });
         });
-  
-        res.on('end', () => {
-          try {
-            const jsonData = JSON.parse(data);
-            resolve(jsonData);
-          } catch (error) {
-            reject(`Error parsing JSON: ${error.message}`);
-          }
+
+        req.on('error', (error) => {
+            reject(`Request error: ${error.message}`);
         });
-      });
-  
-      req.on('error', (error) => {
-        reject(`Request error: ${error.message}`);
-      });
-  
-      req.end();
+
+        req.end();
     });
-  }
+}
 
-
+var i = 0;
 // Función para leer el archivo JSON
 async function readJsonFile(filePath) {
     try {
         const data = await fs.readFile(filePath, 'utf-8');
         var datajson = JSON.parse(data)
         const url = 'https://services.nvd.nist.gov/rest/json/cves/2.0?cveId=';
-
-        var i = 0;
-        for (var vul of datajson.Results[0].Vulnerabilities) {
+        for (var result of datajson.Results) {
             try {
-                const data = await fetchCveData(vul.VulnerabilityID);
-                var metric = data.vulnerabilities[0].cve.metrics
-                if (metric.hasOwnProperty('cvssMetricV31')) {
-                    datajson.Results[0].Vulnerabilities[i].ExploitScore = metric.cvssMetricV31[0].exploitabilityScore
-                } else if (metric.hasOwnProperty('cvssMetricV30')) {
-                    datajson.Results[0].Vulnerabilities[i].ExploitScore = metric.cvssMetricV30[0].exploitabilityScore
-                } else if (metric.hasOwnProperty('cvssMetricV2')) {
-                    datajson.Results[0].Vulnerabilities[i].ExploitScore = metric.cvssMetricV2[0].exploitabilityScore
-                } else {
-                    datajson.Results[0].Vulnerabilities[i].ExploitScore = "not found"
+                for (var vul of result.Vulnerabilities) {
+                    try {
+                        const data = await fetchCveData(vul.VulnerabilityID);
+                        await wait(0);
+                        var metric = data.vulnerabilities[0].cve.metrics
+                        if (metric.hasOwnProperty('cvssMetricV31')) {
+                            vul.ExploitScore = metric.cvssMetricV31[0].exploitabilityScore
+                        } else if (metric.hasOwnProperty('cvssMetricV30')) {
+                            vul.ExploitScore = metric.cvssMetricV30[0].exploitabilityScore
+                        } else if (metric.hasOwnProperty('cvssMetricV2')) {
+                            vul.ExploitScore = metric.cvssMetricV2[0].exploitabilityScore
+                        } else {
+                            vul.ExploitScore = "not found"
+                        }
+                    } catch (error) {
+                        console.error('Error al obtener los datos:', error.message);
+                    }
+                    i++;
                 }
             } catch (error) {
-                console.error('Error al obtener los datos:', error.message);
-            }   
-            i++;
-            await wait(0); // Espera de 1 segundo
+
+            }
         }
         return datajson;
     } catch (error) {
@@ -94,13 +98,16 @@ function convertJsonToHtml(jsonData) {
         th, td { border: 5px solid #ddd; padding: 8px; }
         th { background-color: #00BF6F; }
         h1 { text-align: center; }
+        h2 { text-align: center; }
     </style>
 </head>
 <body>
     <h1>Vulnerabilities Report</h1>
+    <h2>Total: ${i}</h2>
     <table>
         <thead>
             <tr>
+                <th>Target</th>
                 <th>Vulnerability ID</th>
                 <th>Exploit Score</th>
                 <th>Package Name</th>
@@ -114,10 +121,12 @@ function convertJsonToHtml(jsonData) {
             </tr>
         </thead>
         <tbody>`;
-
-    jsonData.Results[0].Vulnerabilities.forEach(vul => {
-        html += `
+    for (var results of jsonData.Results) {
+        try {
+            results.Vulnerabilities.forEach(vul => {
+                html += `
             <tr>
+                <td>${results.Target}</td>
                 <td>${vul.VulnerabilityID}</td>
                 <td>${vul.ExploitScore}</td>
                 <td>${vul.PkgName}</td>
@@ -129,14 +138,18 @@ function convertJsonToHtml(jsonData) {
                 <td>${vul.Description}</td>
                 <td>
                     <ul>`;
-        vul.References.forEach(ref => {
-            html += `<li><a href="${ref}" target="_blank">${ref}</a></li>`;
-        });
-        html += `</ul>
+                vul.References.forEach(ref => {
+                    html += `<li><a href="${ref}" target="_blank">${ref}</a></li>`;
+                });
+
+                html += `</ul>
                 </td>
             </tr>`;
-    });
+            });
+        } catch (error) {
 
+        }
+    }
     html += `
         </tbody>
     </table>
