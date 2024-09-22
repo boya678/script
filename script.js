@@ -160,9 +160,10 @@ function convertJsonToHtml(jsonData) {
 }
 
 // Función para guardar el HTML en un archivo
-async function saveHtmlFile(filePath, htmlContent) {
+async function saveHtmlFile(filePath, htmlContent,jsonFilePath, jsonData ) {
     try {
         await fs.writeFile(filePath, htmlContent, 'utf-8');
+        await fs.writeFile(jsonFilePath, jsonData, 'utf-8');
         console.log(`Archivo HTML guardado en ${filePath}`);
     } catch (error) {
         console.error('Error al guardar el archivo HTML:', error);
@@ -178,7 +179,7 @@ async function main() {
     try {
         const jsonData = await readJsonFile(jsonFilePath);
         const htmlContent = convertJsonToHtml(jsonData);
-        await saveHtmlFile(htmlFilePath, htmlContent);
+        await saveHtmlFile(htmlFilePath, htmlContent,jsonFilePath, jsonData);
     } catch (error) {
         console.error('Error en el proceso:', error);
     }
