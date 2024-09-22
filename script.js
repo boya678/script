@@ -14,7 +14,7 @@ async function fetchCveData(cveId) {
         path: `/rest/json/cves/2.0?cveId=${cveId}`,
         method: 'GET',
         headers: {
-            'apiKey': "0707a7f1-a0ec-4e63-af05-01ca64b78f14" // Incluye la API Key en los encabezados
+            'apiKey': args[2] // Incluye la API Key en los encabezados
         }
     };
 
