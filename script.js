@@ -172,8 +172,8 @@ async function saveHtmlFile(filePath, htmlContent) {
 
 // Función principal
 async function main() {
-    const jsonFilePath = path.join(__dirname, args[0]); // Ruta del archivo JSON
-    const htmlFilePath = path.join(__dirname, 'vulnerabilities.html'); // Ruta del archivo HTML
+    const jsonFilePath = path.join(__dirname, args[0]/args[1]); // Ruta del archivo JSON
+    const htmlFilePath = path.join(__dirname, args[0]/'vulnerabilities.html'); // Ruta del archivo HTML
 
     try {
         const jsonData = await readJsonFile(jsonFilePath);
