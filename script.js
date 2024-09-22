@@ -163,7 +163,7 @@ function convertJsonToHtml(jsonData) {
 async function saveHtmlFile(filePath, htmlContent,jsonFilePath, jsonData ) {
     try {
         await fs.writeFile(filePath, htmlContent, 'utf-8');
-        await fs.writeFile(jsonFilePath, jsonData, 'utf-8');
+        await fs.writeFile(jsonFilePath, JSON.stringify(jsonData), 'utf-8');
         console.log(`Archivo HTML guardado en ${filePath}`);
     } catch (error) {
         console.error('Error al guardar el archivo HTML:', error);
