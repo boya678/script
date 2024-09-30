@@ -9,7 +9,7 @@ function wait(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-function putRequest(path, data, callback) {
+async function putRequest(path, data, callback) {
     const options = {
         hostname: process.env.URL_ELASTIC,
         path: path,
@@ -120,14 +120,14 @@ async function readJsonFile(filePath) {
                             Repository:  args[4],
                             TimeStamp: new Date()
                         })
-                        putRequest("/trivyhist/doc/" + JSON.parse(datavul).VulnerabilityID,datavul, (err, res) => {
+                        await putRequest("/trivyhist/doc/"args[3] + "-" + args[4] + ""- + JSON.parse(datavul).VulnerabilityID,datavul, (err, res) => {
                             if (err) {
                                 console.error(`Error: ${err.message}`);
                             } else {
                                 console.log('Respuesta del servidor:', res);
                             }
                         });
-                        putRequest("/trivy/doc/" + JSON.parse(datavul).VulnerabilityID,datavul + "-" +Date.now(), (err, res) => {
+                        await putRequest("/trivy/doc/"args[3] + "-" + args[4] + ""- + JSON.parse(datavul).VulnerabilityID,datavul + "-" +Date.now(), (err, res) => {
                             if (err) {
                                 console.error(`Error: ${err.message}`);
                             } else {
