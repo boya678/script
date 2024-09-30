@@ -9,53 +9,43 @@ function wait(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-async function putElastic(vul) {
+function putRequest(path, data, callback) {
     const options = {
         hostname: process.env.URL_ELASTIC,
-        path: `/owasphist/doc/${vul.VulnerabilityID}`,
+        path: path,
         method: 'PUT',
+        port: 9200,
         headers: {
-            "content-type": "application/json",
-            "Authorization": "Basic " + process.env.AUTH_ELASTIC
-        },
-        body: {
-
-            VulnerabilityID: vul.VulnerabilityID,
-            ExploitScore: vul.ExploitScore,
-            PkgName: vul.PkgName,
-            InstalledVersion: vul.InstalledVersion,
-            FixedVersion: vul.FixedVersion,
-            Severity: vul.Severity,
-            Title: vul.Title,
-            Description:vul.Description,
-            TimeStamp: new Date()
+            'Content-Type': 'application/json',
+            'Content-Length': Buffer.byteLength(data),
+            "Authorization": "Basic " + process.env.URL_ELASTIC,
         }
     };
 
-    return new Promise((resolve, reject) => {
-        const req = http.request(options, (res) => {
-            let data = '';
+    const req = http.request(options, (res) => {
+        let responseData = '';
 
-            res.on('data', (chunk) => {
-                data += chunk;
-            });
-
-            res.on('end', () => {
-                try {
-                    const jsonData = JSON.parse(data);
-                    resolve(jsonData);
-                } catch (error) {
-                    reject(`Error parsing JSON: ${error.message}`);
-                }
-            });
+        // Recibir los datos en fragmentos
+        res.on('data', (chunk) => {
+            responseData += chunk;
         });
 
-        req.on('error', (error) => {
-            reject(`Request error: ${error.message}`);
+        // Al finalizar la respuesta
+        res.on('end', () => {
+            callback(null, responseData);
         });
-
-        req.end();
     });
+
+    // Manejar los errores
+    req.on('error', (e) => {
+        callback(e);
+    });
+
+    // Escribir los datos en el cuerpo de la solicitud
+    req.write(data);
+
+    // Finalizar la solicitud
+    req.end();
 }
 
 async function fetchCveData(cveId) {
@@ -117,7 +107,34 @@ async function readJsonFile(filePath) {
                         } else {
                             vul.ExploitScore = "not found"
                         }
-                        await putElastic(vul)
+                        const datavul=  JSON.stringify({
+                            VulnerabilityID: vul.VulnerabilityID,
+                            ExploitScore: vul.ExploitScore,
+                            PkgName: vul.PkgName,
+                            InstalledVersion: vul.InstalledVersion,
+                            FixedVersion: vul.FixedVersion,
+                            Severity: vul.Severity,
+                            Title: vul.Title,
+                            Description:vul.Description,
+                            Project:  args[3],
+                            Repository:  args[4],
+                            TimeStamp: new Date()
+                        })
+                        putRequest("/owasphist/doc/" + JSON.parse(datavul).VulnerabilityID,datavul, (err, res) => {
+                            if (err) {
+                                console.error(`Error: ${err.message}`);
+                            } else {
+                                console.log('Respuesta del servidor:', res);
+                            }
+                        });
+                        putRequest("/owasp/doc/" + JSON.parse(datavul).VulnerabilityID,datavul + "-" +Date.now(), (err, res) => {
+                            if (err) {
+                                console.error(`Error: ${err.message}`);
+                            } else {
+                                console.log('Respuesta del servidor:', res);
+                            }
+                        });
+
                     } catch (error) {
                         console.error('Error al obtener los datos:', error.message);
                     }
