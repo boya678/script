@@ -1,11 +1,61 @@
 const fs = require('fs').promises;
 const path = require('path');
 const https = require('https');
-
+const http = require('http');
+const { timeStamp } = require('console');
 const args = process.argv.slice(2);
 
 function wait(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+async function putElastic(vul) {
+    const options = {
+        hostname: process.env.URL_ELASTIC,
+        path: `/owasphist/doc/${vul.VulnerabilityID}`,
+        method: 'PUT',
+        headers: {
+            "content-type": "application/json",
+            "Authorization": "Basic " + process.env.AUTH_ELASTIC
+        },
+        body: {
+
+            VulnerabilityID: vul.VulnerabilityID,
+            ExploitScore: vul.ExploitScore,
+            PkgName: vul.PkgName,
+            InstalledVersion: vul.InstalledVersion,
+            FixedVersion: vul.FixedVersion,
+            Severity: vul.Severity,
+            Title: vul.Title,
+            Description:vul.Description,
+            TimeStamp: new Date()
+        }
+    };
+
+    return new Promise((resolve, reject) => {
+        const req = http.request(options, (res) => {
+            let data = '';
+
+            res.on('data', (chunk) => {
+                data += chunk;
+            });
+
+            res.on('end', () => {
+                try {
+                    const jsonData = JSON.parse(data);
+                    resolve(jsonData);
+                } catch (error) {
+                    reject(`Error parsing JSON: ${error.message}`);
+                }
+            });
+        });
+
+        req.on('error', (error) => {
+            reject(`Request error: ${error.message}`);
+        });
+
+        req.end();
+    });
 }
 
 async function fetchCveData(cveId) {
@@ -67,6 +117,7 @@ async function readJsonFile(filePath) {
                         } else {
                             vul.ExploitScore = "not found"
                         }
+                        await putElastic(vul)
                     } catch (error) {
                         console.error('Error al obtener los datos:', error.message);
                     }
