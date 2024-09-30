@@ -120,7 +120,7 @@ async function readJsonFile(filePath) {
                             Repository:  args[4],
                             TimeStamp: new Date()
                         })
-                        await putRequest("/trivy/doc/" + args[3] + "-" + args[4] + "-" + JSON.parse(datavul).VulnerabilityID,datavul, (err, res) => {
+                        await putRequest("/trivy/doc/" + args[3].replace(" ","") + "-" + args[4] + "-" + JSON.parse(datavul).VulnerabilityID,datavul, (err, res) => {
                             if (err) {
                                 //console.error(`Error: ${err.message}`);
                             } else {
