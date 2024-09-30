@@ -18,7 +18,7 @@ function putRequest(path, data, callback) {
         headers: {
             'Content-Type': 'application/json',
             'Content-Length': Buffer.byteLength(data),
-            "Authorization": "Basic " + process.env.URL_ELASTIC,
+            "Authorization": "Basic " + process.env.AUTH_ELASTIC,
         }
     };
 
