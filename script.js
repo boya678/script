@@ -120,14 +120,14 @@ async function readJsonFile(filePath) {
                             Repository:  args[4],
                             TimeStamp: new Date()
                         })
-                        putRequest("/owasphist/doc/" + JSON.parse(datavul).VulnerabilityID,datavul, (err, res) => {
+                        putRequest("/trivyhist/doc/" + JSON.parse(datavul).VulnerabilityID,datavul, (err, res) => {
                             if (err) {
                                 console.error(`Error: ${err.message}`);
                             } else {
                                 console.log('Respuesta del servidor:', res);
                             }
                         });
-                        putRequest("/owasp/doc/" + JSON.parse(datavul).VulnerabilityID,datavul + "-" +Date.now(), (err, res) => {
+                        putRequest("/trivy/doc/" + JSON.parse(datavul).VulnerabilityID,datavul + "-" +Date.now(), (err, res) => {
                             if (err) {
                                 console.error(`Error: ${err.message}`);
                             } else {
