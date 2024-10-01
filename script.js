@@ -111,7 +111,6 @@ async function readJsonFile(filePath) {
                             VulnerabilityID: vul.VulnerabilityID,
                             Type: result.Type,
                             Class: result.Class,
-                            Target: result.Target,
                             ExploitScore: vul.ExploitScore,
                             PkgName: vul.PkgName,
                             InstalledVersion: vul.InstalledVersion,
