@@ -109,6 +109,8 @@ async function readJsonFile(filePath) {
                         }
                         const datavul=  JSON.stringify({
                             VulnerabilityID: vul.VulnerabilityID,
+                            Type: result.Type,
+                            Class: result.Class,
                             Target: result.Target,
                             ExploitScore: vul.ExploitScore,
                             PkgName: vul.PkgName,
