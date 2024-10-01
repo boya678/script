@@ -284,9 +284,9 @@ async function main() {
             "query": {
                 "bool": {
                     "must": [
-                        { "match": { "Project": args[3] } },
-                        { "match": { "Repository": args[4] } },
-                        { "match": { "Class": args[5] } }
+                        { "terms": { "Project.keyword": args[3] } },
+                        { "terms": { "Repository.keyword": args[4] } },
+                        { "terms": { "Class.keyword": args[5] } }
                     ]
                 }
             }
