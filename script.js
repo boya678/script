@@ -286,6 +286,7 @@ async function main() {
                     "must": [
                         { "match": { "Project": args[3] } },
                         { "match": { "Repository": args[4] } },
+                        { "match": { "Class": args[5] } }
                     ]
                 }
             }
