@@ -147,28 +147,6 @@ async function readJsonFile(filePath) {
                             vul.ExploitScore = "not found"
                         }
 
-
-                        var datadelete = JSON.stringify({
-
-                            "query": {
-                                "bool": {
-                                    "must": [
-                                        { "match": { "Project": args[3] } },
-                                        { "match": { "Repository": args[4] } },
-                                        { "match": { "Class": result.Class } }
-                                    ]
-                                }
-                            }
-                    
-                        })
-                        await postRequest("/trivy/_delete_by_query", datadelete, (err, res) => {
-                            if (err) {
-                                //console.error(`Error: ${err.message}`);
-                            } else {
-                                //console.log('Respuesta del servidor:', res);
-                            }
-                        });
-
                         const datavul = JSON.stringify({
                             VulnerabilityID: vul.VulnerabilityID,
                             Type: result.Type,
@@ -299,6 +277,28 @@ async function saveHtmlFile(filePath, htmlContent, jsonFilePath, jsonData) {
 
 // Función principal
 async function main() {
+
+    if (args[4].includes("develop") || args[4].includes("release") || args[4].includes("master")) {
+        var datadelete = JSON.stringify({
+
+            "query": {
+                "bool": {
+                    "must": [
+                        { "match": { "Project": args[3] } },
+                        { "match": { "Repository": args[4] } },
+                    ]
+                }
+            }
+
+        })
+        await postRequest("/trivy/_delete_by_query", datadelete, (err, res) => {
+            if (err) {
+                //console.error(`Error: ${err.message}`);
+            } else {
+                //console.log('Respuesta del servidor:', res);
+            }
+        });
+    }
 
     const jsonFilePath = path.join(__dirname, args[0] + "/" + args[1]); // Ruta del archivo JSON
     const htmlFilePath = path.join(__dirname, args[0] + '/vulnerabilities.html'); // Ruta del archivo HTML
