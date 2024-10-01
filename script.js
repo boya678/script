@@ -48,6 +48,45 @@ async function putRequest(path, data, callback) {
     req.end();
 }
 
+async function postRequest(path, data, callback) {
+    const options = {
+        hostname: process.env.URL_ELASTIC,
+        path: path,
+        method: 'POST',
+        port: 9200,
+        headers: {
+            'Content-Type': 'application/json',
+            'Content-Length': Buffer.byteLength(data),
+            "Authorization": "Basic " + process.env.AUTH_ELASTIC,
+        }
+    };
+
+    const req = http.request(options, (res) => {
+        let responseData = '';
+
+        // Recibir los datos en fragmentos
+        res.on('data', (chunk) => {
+            responseData += chunk;
+        });
+
+        // Al finalizar la respuesta
+        res.on('end', () => {
+            callback(null, responseData);
+        });
+    });
+
+    // Manejar los errores
+    req.on('error', (e) => {
+        callback(e);
+    });
+
+    // Escribir los datos en el cuerpo de la solicitud
+    req.write(data);
+
+    // Finalizar la solicitud
+    req.end();
+}
+
 async function fetchCveData(cveId) {
     const options = {
         hostname: 'services.nvd.nist.gov',
@@ -107,22 +146,46 @@ async function readJsonFile(filePath) {
                         } else {
                             vul.ExploitScore = "not found"
                         }
-                        const datavul=  JSON.stringify({
+
+
+                        var datadelete = JSON.stringify({
+
+                            "query": {
+                                "bool": {
+                                    "must": [
+                                        { "match": { "Project": args[3] } },
+                                        { "match": { "Repository": args[4] } },
+                                        { "match": { "Class": result.Class } }
+                                    ]
+                                }
+                            }
+                    
+                        })
+                        await postRequest("/trivy/_delete_by_query", datadelete, (err, res) => {
+                            if (err) {
+                                //console.error(`Error: ${err.message}`);
+                            } else {
+                                //console.log('Respuesta del servidor:', res);
+                            }
+                        });
+
+                        const datavul = JSON.stringify({
                             VulnerabilityID: vul.VulnerabilityID,
                             Type: result.Type,
                             Class: result.Class,
+                            Target: result.Target,
                             ExploitScore: vul.ExploitScore,
                             PkgName: vul.PkgName,
                             InstalledVersion: vul.InstalledVersion,
                             FixedVersion: vul.FixedVersion,
                             Severity: vul.Severity,
                             Title: vul.Title,
-                            Description:vul.Description,
-                            Project:  args[3],
-                            Repository:  args[4],
+                            Description: vul.Description,
+                            Project: args[3],
+                            Repository: args[4],
                             TimeStamp: new Date()
                         })
-                        await putRequest("/trivy/doc/" + args[3] + "-" + args[4] + "-" + JSON.parse(datavul).VulnerabilityID,datavul, (err, res) => {
+                        await putRequest("/trivy/doc/" + args[3] + "-" + args[4] + "-" + JSON.parse(datavul).VulnerabilityID, datavul, (err, res) => {
                             if (err) {
                                 //console.error(`Error: ${err.message}`);
                             } else {
@@ -223,7 +286,7 @@ function convertJsonToHtml(jsonData) {
 }
 
 // Función para guardar el HTML en un archivo
-async function saveHtmlFile(filePath, htmlContent,jsonFilePath, jsonData ) {
+async function saveHtmlFile(filePath, htmlContent, jsonFilePath, jsonData) {
     try {
         await fs.writeFile(filePath, htmlContent, 'utf-8');
         await fs.writeFile(jsonFilePath, JSON.stringify(jsonData), 'utf-8');
@@ -236,13 +299,14 @@ async function saveHtmlFile(filePath, htmlContent,jsonFilePath, jsonData ) {
 
 // Función principal
 async function main() {
-    const jsonFilePath = path.join(__dirname, args[0]+"/"+args[1]); // Ruta del archivo JSON
-    const htmlFilePath = path.join(__dirname, args[0]+'/vulnerabilities.html'); // Ruta del archivo HTML
+
+    const jsonFilePath = path.join(__dirname, args[0] + "/" + args[1]); // Ruta del archivo JSON
+    const htmlFilePath = path.join(__dirname, args[0] + '/vulnerabilities.html'); // Ruta del archivo HTML
 
     try {
         const jsonData = await readJsonFile(jsonFilePath);
         const htmlContent = convertJsonToHtml(jsonData);
-        await saveHtmlFile(htmlFilePath, htmlContent,jsonFilePath, jsonData);
+        await saveHtmlFile(htmlFilePath, htmlContent, jsonFilePath, jsonData);
     } catch (error) {
         console.error('Error en el proceso:', error);
     }
