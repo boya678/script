@@ -77,7 +77,7 @@ async function main() {
         const jsonData = await convertXMLToJson('OWASP-ZAP-Report-customerquotamanagementapi-151188-1-1.xml');  // Reemplaza con la ruta de tu archivo XML
 
         // Guardar JSON en un archivo
-        await saveJsonToFile(jsonData, 'resultado.json');  // Especifica la ruta donde quieres guardar el archivo JSON
+        //await saveJsonToFile(jsonData, 'resultado.json');  // Especifica la ruta donde quieres guardar el archivo JSON
         // Enviar el JSON mediante POST
         for (var alertitem of jsonData.OWASPZAPReport.site.alerts.alertitem) {
             var data = null;
