@@ -88,14 +88,12 @@ async function main() {
         var datadelete = JSON.stringify({
 
             "query": {
-                "bool": {
-                    "must": [
-                        { "terms": { "project.keyword": args[0] } },
-                        { "terms": { "repository.keyword": args[1] } },
-                        { "terms": { "branch.keyword": args[2] } }
-                    ]
+                "term": {
+                  "project": args[0],
+                   "repository": args[1],
+                    "branch": args[2]
                 }
-            }
+              }
 
         })
 
