@@ -42,7 +42,7 @@ function saveJsonToFile(jsonData, outputFilePath) {
 }
 
 // Función para hacer POST con el JSON
-function postJsonToEndpoint(jsonData, path) {
+function postJsonToEndpoint(jsonData, path, method) {
     return new Promise((resolve, reject) => {
         const data = JSON.stringify(jsonData);
 
@@ -50,7 +50,7 @@ function postJsonToEndpoint(jsonData, path) {
             hostname: process.env.URL_ELASTIC,  // Solo el hostname, sin "https://"
             port: 9200,  // Puerto 443 para HTTPS
             path: path,  // La ruta de tu endpoint
-            method: 'PUT',
+            method: method,
             headers: {
                 'Content-Type': 'application/json',
                 'Content-Length': Buffer.byteLength(data),
@@ -111,7 +111,7 @@ async function main() {
 
         console.log(datadelete)
 
-        console.log(await postJsonToEndpoint(datadelete, "/owasp/_delete_by_query"));
+        console.log(await postJsonToEndpoint(datadelete, "/owasp/_delete_by_query"), "POST");
 
         // Guardar JSON en un archivo
         //await saveJsonToFile(jsonData, 'resultado.json');  // Especifica la ruta donde quieres guardar el archivo JSON
@@ -143,7 +143,7 @@ async function main() {
                         branch: args[2],
                         timestamp: new Date()
                     }
-                    await postJsonToEndpoint(data, "/owasp/doc/" + generarCadenaAleatoria(128));
+                    await postJsonToEndpoint(data, "/owasp/doc/" + generarCadenaAleatoria(128), "PUT");
                 }
             }
             else {
@@ -170,7 +170,7 @@ async function main() {
                     branch: args[2],
                     timestamp: new Date()
                 }
-                await postJsonToEndpoint(data, "/owasp/doc/" + generarCadenaAleatoria(128));
+                await postJsonToEndpoint(data, "/owasp/doc/" + generarCadenaAleatoria(128),"PUT");
             }
         }
         console.log(cont)
