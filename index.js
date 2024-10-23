@@ -1,6 +1,6 @@
 const fs = require('fs');
 const xml2js = require('xml2js');
-const https = require('https');
+const http = require('http');
 const args = process.argv.slice(2);
 
 // Función para leer y convertir XML a JSON
@@ -50,7 +50,7 @@ function postJsonToEndpoint(jsonData, path) {
             }
         };
 
-        const req = https.request(options, (res) => {
+        const req = http.request(options, (res) => {
             let responseBody = '';
 
             res.on('data', (chunk) => {
