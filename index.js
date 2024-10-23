@@ -7,8 +7,8 @@ const crypto = require('crypto');
 // Función para generar una cadena aleatoria de longitud específica
 function generarCadenaAleatoria(longitud) {
     return crypto.randomBytes(longitud)
-                 .toString('hex') // Convertir a hexadecimal
-                 .slice(0, longitud); // Asegurarse de que tenga la longitud deseada
+        .toString('hex') // Convertir a hexadecimal
+        .slice(0, longitud); // Asegurarse de que tenga la longitud deseada
 }
 
 // Función para leer y convertir XML a JSON
@@ -87,13 +87,29 @@ async function main() {
 
         var datadelete = JSON.stringify({
 
+
             "query": {
-                "term": {
-                  "project": args[0],
-                   "repository": args[1],
-                    "branch": args[2]
+                "bool": {
+                    "must": [
+                        {
+                            "term": {
+                                "project": args[0]
+                            }
+                        },
+                        {
+                            "term": {
+                                "repository": args[1]
+                            }
+                        },
+                        {
+                            "term": {
+                                "branch": args[2]
+                            }
+                        }
+                    ]
                 }
-              }
+            }
+
 
         })
 
@@ -104,7 +120,7 @@ async function main() {
         // Guardar JSON en un archivo
         //await saveJsonToFile(jsonData, 'resultado.json');  // Especifica la ruta donde quieres guardar el archivo JSON
         // Enviar el JSON mediante POST
-        var cont=0;
+        var cont = 0;
         for (var alertitem of jsonData.OWASPZAPReport.site.alerts.alertitem) {
             var data = null;
             if (Array.isArray(alertitem.instances.instance)) {
