@@ -1,0 +1,1682 @@
+<?xml version="1.0"?>
+<OWASPZAPReport programName="ZAP" version="D-2024-10-21" generated="Wed, 23 Oct 2024 00:27:43">
+	
+		<site name="https://ws3.20d2t2infra.com:35000" host="ws3.20d2t2infra.com" port="35000" ssl="true">
+			<alerts>
+				
+					<alertitem>
+						<pluginid>10011</pluginid>
+						<alertRef>10011</alertRef>
+						<alert>Cookie Without Secure Flag</alert>
+						<name>Cookie Without Secure Flag</name>
+						<riskcode>1</riskcode>
+						<confidence>2</confidence>
+						<riskdesc>Low (Medium)</riskdesc>
+						<confidencedesc>Medium</confidencedesc>
+						<desc>&lt;p&gt;A cookie has been set without the secure flag, which means that the cookie can be accessed via unencrypted connections.&lt;/p&gt;</desc>
+						<instances>
+							
+								<instance>
+									<uri>https://ws3.20d2t2infra.com:35000/customerquotamanagementapi-swagger/v1/swagger.json</uri>
+									<method>GET</method>
+									<param>cookiesession1</param>
+									<attack></attack>
+									<evidence>Set-Cookie: cookiesession1</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+						</instances>
+						<count>1</count>
+						<solution>&lt;p&gt;Whenever a cookie contains sensitive information or is a session token, then it should always be passed using an encrypted channel. Ensure that the secure flag is set for cookies containing such sensitive information.&lt;/p&gt;</solution>
+						<otherinfo></otherinfo>
+						<reference>&lt;p&gt;https://owasp.org/www-project-web-security-testing-guide/v41/4-Web_Application_Security_Testing/06-Session_Management_Testing/02-Testing_for_Cookies_Attributes.html&lt;/p&gt;</reference>
+						<cweid>614</cweid>
+						<wascid>13</wascid>
+						<sourceid>1</sourceid>
+					</alertitem>
+				
+				
+					<alertitem>
+						<pluginid>10054</pluginid>
+						<alertRef>10054-1</alertRef>
+						<alert>Cookie without SameSite Attribute</alert>
+						<name>Cookie without SameSite Attribute</name>
+						<riskcode>1</riskcode>
+						<confidence>2</confidence>
+						<riskdesc>Low (Medium)</riskdesc>
+						<confidencedesc>Medium</confidencedesc>
+						<desc>&lt;p&gt;A cookie has been set without the SameSite attribute, which means that the cookie can be sent as a result of a &apos;cross-site&apos; request. The SameSite attribute is an effective counter measure to cross-site request forgery, cross-site script inclusion, and timing attacks.&lt;/p&gt;</desc>
+						<instances>
+							
+								<instance>
+									<uri>https://ws3.20d2t2infra.com:35000/customerquotamanagementapi-swagger/v1/swagger.json</uri>
+									<method>GET</method>
+									<param>cookiesession1</param>
+									<attack></attack>
+									<evidence>Set-Cookie: cookiesession1</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+						</instances>
+						<count>1</count>
+						<solution>&lt;p&gt;Ensure that the SameSite attribute is set to either &apos;lax&apos; or ideally &apos;strict&apos; for all cookies.&lt;/p&gt;</solution>
+						<otherinfo></otherinfo>
+						<reference>&lt;p&gt;https://tools.ietf.org/html/draft-ietf-httpbis-cookie-same-site&lt;/p&gt;</reference>
+						<cweid>1275</cweid>
+						<wascid>13</wascid>
+						<sourceid>1</sourceid>
+					</alertitem>
+				
+				
+					<alertitem>
+						<pluginid>100001</pluginid>
+						<alertRef>100001</alertRef>
+						<alert>Unexpected Content-Type was returned</alert>
+						<name>Unexpected Content-Type was returned</name>
+						<riskcode>1</riskcode>
+						<confidence>3</confidence>
+						<riskdesc>Low (High)</riskdesc>
+						<confidencedesc>High</confidencedesc>
+						<desc>&lt;p&gt;A Content-Type of text/html was returned by the server.&lt;/p&gt;&lt;p&gt;This is not one of the types expected to be returned by an API.&lt;/p&gt;&lt;p&gt;Raised by the &apos;Alert on Unexpected Content Types&apos; script&lt;/p&gt;</desc>
+						<instances>
+							
+								<instance>
+									<uri>https://ws3.20d2t2infra.com:35000</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>text/html</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://ws3.20d2t2infra.com:35000/1653858157267568967</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>text/html</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://ws3.20d2t2infra.com:35000/customerquotamanagementapi</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>text/html</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://ws3.20d2t2infra.com:35000/customerquotamanagementapi-swagger</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>text/html</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://ws3.20d2t2infra.com:35000/customerquotamanagementapi/api/Customers/BusinessUnits/LastQuota?customerId=%22%2Bresponse.write%28384%2C711*542%2C837%29%2B%22&amp;businessUnitId=10</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>text/html</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://ws3.20d2t2infra.com:35000/customerquotamanagementapi/api/Customers/BusinessUnits/LastQuota?customerId=%22%3Bprint%28chr%28122%29.chr%2897%29.chr%28112%29.chr%2895%29.chr%28116%29.chr%28111%29.chr%28107%29.chr%28101%29.chr%28110%29%29%3B%24var%3D%22&amp;businessUnitId=10</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>text/html</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://ws3.20d2t2infra.com:35000/customerquotamanagementapi/api/Customers/BusinessUnits/LastQuota?customerId=%22%3E%3C%21--%23EXEC+cmd%3D%22dir+%5C%22--%3E%3C&amp;businessUnitId=10</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>text/html</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://ws3.20d2t2infra.com:35000/customerquotamanagementapi/api/Customers/BusinessUnits/LastQuota?customerId=%22%3E%3C%21--%23EXEC+cmd%3D%22ls+%2F%22--%3E%3C&amp;businessUnitId=10</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>text/html</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://ws3.20d2t2infra.com:35000/customerquotamanagementapi/api/Customers/BusinessUnits/LastQuota?customerId=%24%7B%40print%28chr%28122%29.chr%2897%29.chr%28112%29.chr%2895%29.chr%28116%29.chr%28111%29.chr%28107%29.chr%28101%29.chr%28110%29%29%7D%5C&amp;businessUnitId=10</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>text/html</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://ws3.20d2t2infra.com:35000/customerquotamanagementapi/api/Customers/BusinessUnits/LastQuota?customerId=%24%7B%40print%28chr%28122%29.chr%2897%29.chr%28112%29.chr%2895%29.chr%28116%29.chr%28111%29.chr%28107%29.chr%28101%29.chr%28110%29%29%7D&amp;businessUnitId=10</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>text/html</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://ws3.20d2t2infra.com:35000/customerquotamanagementapi/api/Customers/BusinessUnits/LastQuota?customerId=%27%3Bprint%28chr%28122%29.chr%2897%29.chr%28112%29.chr%2895%29.chr%28116%29.chr%28111%29.chr%28107%29.chr%28101%29.chr%28110%29%29%3B%24var%3D%27&amp;businessUnitId=10</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>text/html</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://ws3.20d2t2infra.com:35000/customerquotamanagementapi/api/Customers/BusinessUnits/LastQuota?customerId=%3Bprint%28chr%28122%29.chr%2897%29.chr%28112%29.chr%2895%29.chr%28116%29.chr%28111%29.chr%28107%29.chr%28101%29.chr%28110%29%29%3B&amp;businessUnitId=10</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>text/html</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://ws3.20d2t2infra.com:35000/customerquotamanagementapi/api/Customers/BusinessUnits/LastQuota?customerId=%3C%21--%23EXEC+cmd%3D%22dir+%5C%22--%3E&amp;businessUnitId=10</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>text/html</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://ws3.20d2t2infra.com:35000/customerquotamanagementapi/api/Customers/BusinessUnits/LastQuota?customerId=%3C%21--%23EXEC+cmd%3D%22ls+%2F%22--%3E&amp;businessUnitId=10</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>text/html</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://ws3.20d2t2infra.com:35000/customerquotamanagementapi/api/Customers/BusinessUnits/LastQuota?customerId=10%22%26cat+%2Fetc%2Fpasswd%26%22&amp;businessUnitId=10</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>text/html</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://ws3.20d2t2infra.com:35000/customerquotamanagementapi/api/Customers/BusinessUnits/LastQuota?customerId=10%22%26sleep+15.0%26%22&amp;businessUnitId=10</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>text/html</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://ws3.20d2t2infra.com:35000/customerquotamanagementapi/api/Customers/BusinessUnits/LastQuota?customerId=10%22%26timeout+%2FT+15.0%26%22&amp;businessUnitId=10</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>text/html</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://ws3.20d2t2infra.com:35000/customerquotamanagementapi/api/Customers/BusinessUnits/LastQuota?customerId=10%22%26type+%25SYSTEMROOT%25%5Cwin.ini%26%22&amp;businessUnitId=10</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>text/html</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://ws3.20d2t2infra.com:35000/customerquotamanagementapi/api/Customers/BusinessUnits/LastQuota?customerId=10%22%3Bcat+%2Fetc%2Fpasswd%3B%22&amp;businessUnitId=10</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>text/html</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://ws3.20d2t2infra.com:35000/customerquotamanagementapi/api/Customers/BusinessUnits/LastQuota?customerId=10%22+AND+%221%22%3D%221%22+--+&amp;businessUnitId=10</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>text/html</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://ws3.20d2t2infra.com:35000/customerquotamanagementapi/api/Customers/BusinessUnits/LastQuota?customerId=10%22+AND+%221%22%3D%221&amp;businessUnitId=10</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>text/html</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://ws3.20d2t2infra.com:35000/customerquotamanagementapi/api/Customers/BusinessUnits/LastQuota?customerId=10%22+UNION+ALL+select+NULL+--+&amp;businessUnitId=10</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>text/html</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://ws3.20d2t2infra.com:35000/customerquotamanagementapi/api/Customers/BusinessUnits/LastQuota?customerId=10%26cat+%2Fetc%2Fpasswd%26&amp;businessUnitId=10</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>text/html</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://ws3.20d2t2infra.com:35000/customerquotamanagementapi/api/Customers/BusinessUnits/LastQuota?customerId=10%26sleep+15.0%26&amp;businessUnitId=10</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>text/html</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://ws3.20d2t2infra.com:35000/customerquotamanagementapi/api/Customers/BusinessUnits/LastQuota?customerId=10%27%26cat+%2Fetc%2Fpasswd%26%27&amp;businessUnitId=10</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>text/html</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://ws3.20d2t2infra.com:35000/customerquotamanagementapi/api/Customers/BusinessUnits/LastQuota?customerId=10%27%26sleep+15.0%26%27&amp;businessUnitId=10</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>text/html</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://ws3.20d2t2infra.com:35000/customerquotamanagementapi/api/Customers/BusinessUnits/LastQuota?customerId=10%27%26timeout+%2FT+15.0%26%27&amp;businessUnitId=10</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>text/html</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://ws3.20d2t2infra.com:35000/customerquotamanagementapi/api/Customers/BusinessUnits/LastQuota?customerId=10%27%26type+%25SYSTEMROOT%25%5Cwin.ini%26%27&amp;businessUnitId=10</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>text/html</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://ws3.20d2t2infra.com:35000/customerquotamanagementapi/api/Customers/BusinessUnits/LastQuota?customerId=10%27%29+UNION+ALL+select+NULL+--+&amp;businessUnitId=10</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>text/html</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://ws3.20d2t2infra.com:35000/customerquotamanagementapi/api/Customers/BusinessUnits/LastQuota?customerId=10%27%3Bcat+%2Fetc%2Fpasswd%3B%27&amp;businessUnitId=10</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>text/html</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://ws3.20d2t2infra.com:35000/customerquotamanagementapi/api/Customers/BusinessUnits/LastQuota?customerId=10%27+AND+%271%27%3D%271%27+--+&amp;businessUnitId=10</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>text/html</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://ws3.20d2t2infra.com:35000/customerquotamanagementapi/api/Customers/BusinessUnits/LastQuota?customerId=10%27+AND+%271%27%3D%271&amp;businessUnitId=10</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>text/html</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://ws3.20d2t2infra.com:35000/customerquotamanagementapi/api/Customers/BusinessUnits/LastQuota?customerId=10%27+UNION+ALL+select+NULL+--+&amp;businessUnitId=10</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>text/html</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://ws3.20d2t2infra.com:35000/customerquotamanagementapi/api/Customers/BusinessUnits/LastQuota?customerId=10%29+UNION+ALL+select+NULL+--+&amp;businessUnitId=10</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>text/html</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://ws3.20d2t2infra.com:35000/customerquotamanagementapi/api/Customers/BusinessUnits/LastQuota?customerId=10%3Bcat+%2Fetc%2Fpasswd%3B&amp;businessUnitId=10</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>text/html</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://ws3.20d2t2infra.com:35000/customerquotamanagementapi/api/Customers/BusinessUnits/LastQuota?customerId=10&amp;businessUnitId=%22%2Bresponse.write%28459%2C672*887%2C308%29%2B%22</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>text/html</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://ws3.20d2t2infra.com:35000/customerquotamanagementapi/api/Customers/BusinessUnits/LastQuota?customerId=10&amp;businessUnitId=%22%3Bprint%28chr%28122%29.chr%2897%29.chr%28112%29.chr%2895%29.chr%28116%29.chr%28111%29.chr%28107%29.chr%28101%29.chr%28110%29%29%3B%24var%3D%22</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>text/html</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://ws3.20d2t2infra.com:35000/customerquotamanagementapi/api/Customers/BusinessUnits/LastQuota?customerId=10&amp;businessUnitId=%22%3E%3C%21--%23EXEC+cmd%3D%22dir+%5C%22--%3E%3C</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>text/html</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://ws3.20d2t2infra.com:35000/customerquotamanagementapi/api/Customers/BusinessUnits/LastQuota?customerId=10&amp;businessUnitId=%22%3E%3C%21--%23EXEC+cmd%3D%22ls+%2F%22--%3E%3C</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>text/html</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://ws3.20d2t2infra.com:35000/customerquotamanagementapi/api/Customers/BusinessUnits/LastQuota?customerId=10&amp;businessUnitId=%24%7B%40print%28chr%28122%29.chr%2897%29.chr%28112%29.chr%2895%29.chr%28116%29.chr%28111%29.chr%28107%29.chr%28101%29.chr%28110%29%29%7D</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>text/html</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://ws3.20d2t2infra.com:35000/customerquotamanagementapi/api/Customers/BusinessUnits/LastQuota?customerId=10&amp;businessUnitId=%24%7B%40print%28chr%28122%29.chr%2897%29.chr%28112%29.chr%2895%29.chr%28116%29.chr%28111%29.chr%28107%29.chr%28101%29.chr%28110%29%29%7D%5C</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>text/html</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://ws3.20d2t2infra.com:35000/customerquotamanagementapi/api/Customers/BusinessUnits/LastQuota?customerId=10&amp;businessUnitId=%27%3Bprint%28chr%28122%29.chr%2897%29.chr%28112%29.chr%2895%29.chr%28116%29.chr%28111%29.chr%28107%29.chr%28101%29.chr%28110%29%29%3B%24var%3D%27</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>text/html</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://ws3.20d2t2infra.com:35000/customerquotamanagementapi/api/Customers/BusinessUnits/LastQuota?customerId=10&amp;businessUnitId=%3Bprint%28chr%28122%29.chr%2897%29.chr%28112%29.chr%2895%29.chr%28116%29.chr%28111%29.chr%28107%29.chr%28101%29.chr%28110%29%29%3B</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>text/html</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://ws3.20d2t2infra.com:35000/customerquotamanagementapi/api/Customers/BusinessUnits/LastQuota?customerId=10&amp;businessUnitId=%3C%21--%23EXEC+cmd%3D%22dir+%5C%22--%3E</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>text/html</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://ws3.20d2t2infra.com:35000/customerquotamanagementapi/api/Customers/BusinessUnits/LastQuota?customerId=10&amp;businessUnitId=%3C%21--%23EXEC+cmd%3D%22ls+%2F%22--%3E</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>text/html</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://ws3.20d2t2infra.com:35000/customerquotamanagementapi/api/Customers/BusinessUnits/LastQuota?customerId=10&amp;businessUnitId=10%22%26cat+%2Fetc%2Fpasswd%26%22</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>text/html</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://ws3.20d2t2infra.com:35000/customerquotamanagementapi/api/Customers/BusinessUnits/LastQuota?customerId=10&amp;businessUnitId=10%22%26sleep+15.0%26%22</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>text/html</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://ws3.20d2t2infra.com:35000/customerquotamanagementapi/api/Customers/BusinessUnits/LastQuota?customerId=10&amp;businessUnitId=10%22%26timeout+%2FT+15.0%26%22</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>text/html</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://ws3.20d2t2infra.com:35000/customerquotamanagementapi/api/Customers/BusinessUnits/LastQuota?customerId=10&amp;businessUnitId=10%22%26type+%25SYSTEMROOT%25%5Cwin.ini%26%22</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>text/html</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://ws3.20d2t2infra.com:35000/customerquotamanagementapi/api/Customers/BusinessUnits/LastQuota?customerId=10&amp;businessUnitId=10%22%3Bcat+%2Fetc%2Fpasswd%3B%22</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>text/html</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://ws3.20d2t2infra.com:35000/customerquotamanagementapi/api/Customers/BusinessUnits/LastQuota?customerId=10&amp;businessUnitId=10%22+AND+%221%22%3D%221</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>text/html</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://ws3.20d2t2infra.com:35000/customerquotamanagementapi/api/Customers/BusinessUnits/LastQuota?customerId=10&amp;businessUnitId=10%22+AND+%221%22%3D%221%22+--+</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>text/html</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://ws3.20d2t2infra.com:35000/customerquotamanagementapi/api/Customers/BusinessUnits/LastQuota?customerId=10&amp;businessUnitId=10%22+UNION+ALL+select+NULL+--+</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>text/html</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://ws3.20d2t2infra.com:35000/customerquotamanagementapi/api/Customers/BusinessUnits/LastQuota?customerId=10&amp;businessUnitId=10%26cat+%2Fetc%2Fpasswd%26</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>text/html</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://ws3.20d2t2infra.com:35000/customerquotamanagementapi/api/Customers/BusinessUnits/LastQuota?customerId=10&amp;businessUnitId=10%26sleep+15.0%26</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>text/html</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://ws3.20d2t2infra.com:35000/customerquotamanagementapi/api/Customers/BusinessUnits/LastQuota?customerId=10&amp;businessUnitId=10%27%26cat+%2Fetc%2Fpasswd%26%27</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>text/html</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://ws3.20d2t2infra.com:35000/customerquotamanagementapi/api/Customers/BusinessUnits/LastQuota?customerId=10&amp;businessUnitId=10%27%26sleep+15.0%26%27</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>text/html</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://ws3.20d2t2infra.com:35000/customerquotamanagementapi/api/Customers/BusinessUnits/LastQuota?customerId=10&amp;businessUnitId=10%27%26timeout+%2FT+15.0%26%27</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>text/html</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://ws3.20d2t2infra.com:35000/customerquotamanagementapi/api/Customers/BusinessUnits/LastQuota?customerId=10&amp;businessUnitId=10%27%26type+%25SYSTEMROOT%25%5Cwin.ini%26%27</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>text/html</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://ws3.20d2t2infra.com:35000/customerquotamanagementapi/api/Customers/BusinessUnits/LastQuota?customerId=10&amp;businessUnitId=10%27%29+UNION+ALL+select+NULL+--+</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>text/html</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://ws3.20d2t2infra.com:35000/customerquotamanagementapi/api/Customers/BusinessUnits/LastQuota?customerId=10&amp;businessUnitId=10%27%3Bcat+%2Fetc%2Fpasswd%3B%27</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>text/html</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://ws3.20d2t2infra.com:35000/customerquotamanagementapi/api/Customers/BusinessUnits/LastQuota?customerId=10&amp;businessUnitId=10%27+AND+%271%27%3D%271</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>text/html</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://ws3.20d2t2infra.com:35000/customerquotamanagementapi/api/Customers/BusinessUnits/LastQuota?customerId=10&amp;businessUnitId=10%27+AND+%271%27%3D%271%27+--+</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>text/html</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://ws3.20d2t2infra.com:35000/customerquotamanagementapi/api/Customers/BusinessUnits/LastQuota?customerId=10&amp;businessUnitId=10%27+UNION+ALL+select+NULL+--+</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>text/html</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://ws3.20d2t2infra.com:35000/customerquotamanagementapi/api/Customers/BusinessUnits/LastQuota?customerId=10&amp;businessUnitId=10%29+UNION+ALL+select+NULL+--+</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>text/html</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://ws3.20d2t2infra.com:35000/customerquotamanagementapi/api/Customers/BusinessUnits/LastQuota?customerId=10&amp;businessUnitId=10%3Bcat+%2Fetc%2Fpasswd%3B</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>text/html</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://ws3.20d2t2infra.com:35000/customerquotamanagementapi/api/Customers/BusinessUnits/LastQuota?customerId=10&amp;businessUnitId=10+AND+1%3D1</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>text/html</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://ws3.20d2t2infra.com:35000/customerquotamanagementapi/api/Customers/BusinessUnits/LastQuota?customerId=10&amp;businessUnitId=10+AND+1%3D1+--+</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>text/html</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://ws3.20d2t2infra.com:35000/customerquotamanagementapi/api/Customers/BusinessUnits/LastQuota?customerId=10&amp;businessUnitId=10+UNION+ALL+select+NULL+--+</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>text/html</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://ws3.20d2t2infra.com:35000/customerquotamanagementapi/api/Customers/BusinessUnits/LastQuota?customerId=10&amp;businessUnitId=5%3BURL%3D%27https%3A%2F%2F2926556589093797542.owasp.org%27</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>text/html</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://ws3.20d2t2infra.com:35000/customerquotamanagementapi/api/Customers/BusinessUnits/LastQuota?customerId=10&amp;businessUnitId=cat+%2Fetc%2Fpasswd</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>text/html</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://ws3.20d2t2infra.com:35000/customerquotamanagementapi/api/Customers/BusinessUnits/LastQuota?customerId=10&amp;businessUnitId=http%3A%2F%2F%5C2926556589093797542.owasp.org</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>text/html</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://ws3.20d2t2infra.com:35000/customerquotamanagementapi/api/Customers/BusinessUnits/LastQuota?customerId=10&amp;businessUnitId=http%3A%2F%2F2926556589093797542.owasp.org</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>text/html</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://ws3.20d2t2infra.com:35000/customerquotamanagementapi/api/Customers/BusinessUnits/LastQuota?customerId=10&amp;businessUnitId=http%3A%2F%2Fwww.google.com</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>text/html</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://ws3.20d2t2infra.com:35000/customerquotamanagementapi/api/Customers/BusinessUnits/LastQuota?customerId=10&amp;businessUnitId=http%3A%2F%2Fwww.google.com%2F</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>text/html</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://ws3.20d2t2infra.com:35000/customerquotamanagementapi/api/Customers/BusinessUnits/LastQuota?customerId=10&amp;businessUnitId=http%3A%2F%2Fwww.google.com%2Fsearch%3Fq%3DZAP</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>text/html</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://ws3.20d2t2infra.com:35000/customerquotamanagementapi/api/Customers/BusinessUnits/LastQuota?customerId=10&amp;businessUnitId=http%3A%2F%2Fwww.google.com%3A80%2F</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>text/html</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://ws3.20d2t2infra.com:35000/customerquotamanagementapi/api/Customers/BusinessUnits/LastQuota?customerId=10&amp;businessUnitId=http%3A%2F%2Fwww.google.com%3A80%2Fsearch%3Fq%3DZAP</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>text/html</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://ws3.20d2t2infra.com:35000/customerquotamanagementapi/api/Customers/BusinessUnits/LastQuota?customerId=10&amp;businessUnitId=https%3A%2F%2F%5C2926556589093797542.owasp.org</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>text/html</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://ws3.20d2t2infra.com:35000/customerquotamanagementapi/api/Customers/BusinessUnits/LastQuota?customerId=10&amp;businessUnitId=https%3A%2F%2F2926556589093797542%252eowasp%252eorg</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>text/html</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://ws3.20d2t2infra.com:35000/customerquotamanagementapi/api/Customers/BusinessUnits/LastQuota?customerId=10&amp;businessUnitId=https%3A%2F%2F2926556589093797542.owasp.org</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>text/html</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://ws3.20d2t2infra.com:35000/customerquotamanagementapi/api/Customers/BusinessUnits/LastQuota?customerId=10&amp;businessUnitId=URL%3D%27http%3A%2F%2F2926556589093797542.owasp.org%27</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>text/html</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://ws3.20d2t2infra.com:35000/customerquotamanagementapi/api/Customers/BusinessUnits/LastQuota?customerId=10+AND+1%3D1&amp;businessUnitId=10</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>text/html</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://ws3.20d2t2infra.com:35000/customerquotamanagementapi/api/Customers/BusinessUnits/LastQuota?customerId=10+AND+1%3D1+--+&amp;businessUnitId=10</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>text/html</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://ws3.20d2t2infra.com:35000/customerquotamanagementapi/api/Customers/BusinessUnits/LastQuota?customerId=10+UNION+ALL+select+NULL+--+&amp;businessUnitId=10</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>text/html</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://ws3.20d2t2infra.com:35000/customerquotamanagementapi/api/Customers/BusinessUnits/LastQuota?customerId=5%3BURL%3D%27https%3A%2F%2F2926556589093797542.owasp.org%27&amp;businessUnitId=10</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>text/html</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://ws3.20d2t2infra.com:35000/customerquotamanagementapi/api/Customers/BusinessUnits/LastQuota?customerId=cat+%2Fetc%2Fpasswd&amp;businessUnitId=10</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>text/html</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://ws3.20d2t2infra.com:35000/customerquotamanagementapi/api/Customers/BusinessUnits/LastQuota?customerId=http%3A%2F%2F%5C2926556589093797542.owasp.org&amp;businessUnitId=10</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>text/html</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://ws3.20d2t2infra.com:35000/customerquotamanagementapi/api/Customers/BusinessUnits/LastQuota?customerId=http%3A%2F%2F2926556589093797542.owasp.org&amp;businessUnitId=10</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>text/html</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://ws3.20d2t2infra.com:35000/customerquotamanagementapi/api/Customers/BusinessUnits/LastQuota?customerId=http%3A%2F%2Fwww.google.com%2F&amp;businessUnitId=10</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>text/html</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://ws3.20d2t2infra.com:35000/customerquotamanagementapi/api/Customers/BusinessUnits/LastQuota?customerId=http%3A%2F%2Fwww.google.com%2Fsearch%3Fq%3DZAP&amp;businessUnitId=10</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>text/html</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://ws3.20d2t2infra.com:35000/customerquotamanagementapi/api/Customers/BusinessUnits/LastQuota?customerId=http%3A%2F%2Fwww.google.com%3A80%2F&amp;businessUnitId=10</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>text/html</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://ws3.20d2t2infra.com:35000/customerquotamanagementapi/api/Customers/BusinessUnits/LastQuota?customerId=http%3A%2F%2Fwww.google.com%3A80%2Fsearch%3Fq%3DZAP&amp;businessUnitId=10</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>text/html</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://ws3.20d2t2infra.com:35000/customerquotamanagementapi/api/Customers/BusinessUnits/LastQuota?customerId=http%3A%2F%2Fwww.google.com&amp;businessUnitId=10</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>text/html</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://ws3.20d2t2infra.com:35000/customerquotamanagementapi/api/Customers/BusinessUnits/LastQuota?customerId=https%3A%2F%2F%5C2926556589093797542.owasp.org&amp;businessUnitId=10</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>text/html</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://ws3.20d2t2infra.com:35000/customerquotamanagementapi/api/Customers/BusinessUnits/LastQuota?customerId=https%3A%2F%2F2926556589093797542%252eowasp%252eorg&amp;businessUnitId=10</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>text/html</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://ws3.20d2t2infra.com:35000/customerquotamanagementapi/api/Customers/BusinessUnits/LastQuota?customerId=https%3A%2F%2F2926556589093797542.owasp.org&amp;businessUnitId=10</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>text/html</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://ws3.20d2t2infra.com:35000/customerquotamanagementapi/api/Customers/BusinessUnits/LastQuota?customerId=URL%3D%27http%3A%2F%2F2926556589093797542.owasp.org%27&amp;businessUnitId=10</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>text/html</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://ws3.20d2t2infra.com:35000/customerquotamanagementapi/api/Customers/Quotas/BalanceInUse?customerId=%22%2Bresponse.write%28389%2C056*695%2C671%29%2B%22</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>text/html</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://ws3.20d2t2infra.com:35000/customerquotamanagementapi/api/Customers/Quotas/BalanceInUse?customerId=%22%3Bprint%28chr%28122%29.chr%2897%29.chr%28112%29.chr%2895%29.chr%28116%29.chr%28111%29.chr%28107%29.chr%28101%29.chr%28110%29%29%3B%24var%3D%22</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>text/html</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://ws3.20d2t2infra.com:35000/customerquotamanagementapi/api/Customers/Quotas/BalanceInUse?customerId=%22%3E%3C%21--%23EXEC+cmd%3D%22dir+%5C%22--%3E%3C</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>text/html</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://ws3.20d2t2infra.com:35000/customerquotamanagementapi/api/Customers/Quotas/BalanceInUse?customerId=%22%3E%3C%21--%23EXEC+cmd%3D%22ls+%2F%22--%3E%3C</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>text/html</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://ws3.20d2t2infra.com:35000/customerquotamanagementapi/api/Customers/Quotas/BalanceInUse?customerId=%24%7B%40print%28chr%28122%29.chr%2897%29.chr%28112%29.chr%2895%29.chr%28116%29.chr%28111%29.chr%28107%29.chr%28101%29.chr%28110%29%29%7D</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>text/html</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://ws3.20d2t2infra.com:35000/customerquotamanagementapi/api/Customers/Quotas/BalanceInUse?customerId=%24%7B%40print%28chr%28122%29.chr%2897%29.chr%28112%29.chr%2895%29.chr%28116%29.chr%28111%29.chr%28107%29.chr%28101%29.chr%28110%29%29%7D%5C</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>text/html</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://ws3.20d2t2infra.com:35000/customerquotamanagementapi/api/Customers/Quotas/BalanceInUse?customerId=%27%3Bprint%28chr%28122%29.chr%2897%29.chr%28112%29.chr%2895%29.chr%28116%29.chr%28111%29.chr%28107%29.chr%28101%29.chr%28110%29%29%3B%24var%3D%27</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>text/html</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://ws3.20d2t2infra.com:35000/customerquotamanagementapi/api/Customers/Quotas/BalanceInUse?customerId=%3Bprint%28chr%28122%29.chr%2897%29.chr%28112%29.chr%2895%29.chr%28116%29.chr%28111%29.chr%28107%29.chr%28101%29.chr%28110%29%29%3B</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>text/html</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://ws3.20d2t2infra.com:35000/customerquotamanagementapi/api/Customers/Quotas/BalanceInUse?customerId=%3C%21--%23EXEC+cmd%3D%22dir+%5C%22--%3E</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>text/html</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://ws3.20d2t2infra.com:35000/customerquotamanagementapi/api/Customers/Quotas/BalanceInUse?customerId=%3C%21--%23EXEC+cmd%3D%22ls+%2F%22--%3E</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>text/html</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://ws3.20d2t2infra.com:35000/customerquotamanagementapi/api/Customers/Quotas/BalanceInUse?customerId=10%22%26cat+%2Fetc%2Fpasswd%26%22</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>text/html</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://ws3.20d2t2infra.com:35000/customerquotamanagementapi/api/Customers/Quotas/BalanceInUse?customerId=10%22%26sleep+15.0%26%22</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>text/html</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://ws3.20d2t2infra.com:35000/customerquotamanagementapi/api/Customers/Quotas/BalanceInUse?customerId=10%22%26timeout+%2FT+15.0%26%22</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>text/html</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://ws3.20d2t2infra.com:35000/customerquotamanagementapi/api/Customers/Quotas/BalanceInUse?customerId=10%22%26type+%25SYSTEMROOT%25%5Cwin.ini%26%22</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>text/html</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://ws3.20d2t2infra.com:35000/customerquotamanagementapi/api/Customers/Quotas/BalanceInUse?customerId=10%22%3Bcat+%2Fetc%2Fpasswd%3B%22</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>text/html</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://ws3.20d2t2infra.com:35000/customerquotamanagementapi/api/Customers/Quotas/BalanceInUse?customerId=10%22+AND+%221%22%3D%221</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>text/html</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://ws3.20d2t2infra.com:35000/customerquotamanagementapi/api/Customers/Quotas/BalanceInUse?customerId=10%22+AND+%221%22%3D%221%22+--+</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>text/html</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://ws3.20d2t2infra.com:35000/customerquotamanagementapi/api/Customers/Quotas/BalanceInUse?customerId=10%22+UNION+ALL+select+NULL+--+</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>text/html</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://ws3.20d2t2infra.com:35000/customerquotamanagementapi/api/Customers/Quotas/BalanceInUse?customerId=10%26cat+%2Fetc%2Fpasswd%26</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>text/html</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://ws3.20d2t2infra.com:35000/customerquotamanagementapi/api/Customers/Quotas/BalanceInUse?customerId=10%26sleep+15.0%26</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>text/html</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://ws3.20d2t2infra.com:35000/customerquotamanagementapi/api/Customers/Quotas/BalanceInUse?customerId=10%27%26cat+%2Fetc%2Fpasswd%26%27</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>text/html</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://ws3.20d2t2infra.com:35000/customerquotamanagementapi/api/Customers/Quotas/BalanceInUse?customerId=10%27%26sleep+15.0%26%27</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>text/html</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://ws3.20d2t2infra.com:35000/customerquotamanagementapi/api/Customers/Quotas/BalanceInUse?customerId=10%27%26timeout+%2FT+15.0%26%27</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>text/html</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://ws3.20d2t2infra.com:35000/customerquotamanagementapi/api/Customers/Quotas/BalanceInUse?customerId=10%27%26type+%25SYSTEMROOT%25%5Cwin.ini%26%27</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>text/html</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://ws3.20d2t2infra.com:35000/customerquotamanagementapi/api/Customers/Quotas/BalanceInUse?customerId=10%27%29+UNION+ALL+select+NULL+--+</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>text/html</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://ws3.20d2t2infra.com:35000/customerquotamanagementapi/api/Customers/Quotas/BalanceInUse?customerId=10%27%3Bcat+%2Fetc%2Fpasswd%3B%27</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>text/html</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://ws3.20d2t2infra.com:35000/customerquotamanagementapi/api/Customers/Quotas/BalanceInUse?customerId=10%27+AND+%271%27%3D%271</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>text/html</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://ws3.20d2t2infra.com:35000/customerquotamanagementapi/api/Customers/Quotas/BalanceInUse?customerId=10%27+AND+%271%27%3D%271%27+--+</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>text/html</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://ws3.20d2t2infra.com:35000/customerquotamanagementapi/api/Customers/Quotas/BalanceInUse?customerId=10%27+UNION+ALL+select+NULL+--+</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>text/html</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://ws3.20d2t2infra.com:35000/customerquotamanagementapi/api/Customers/Quotas/BalanceInUse?customerId=10%29+UNION+ALL+select+NULL+--+</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>text/html</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://ws3.20d2t2infra.com:35000/customerquotamanagementapi/api/Customers/Quotas/BalanceInUse?customerId=10%3Bcat+%2Fetc%2Fpasswd%3B</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>text/html</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://ws3.20d2t2infra.com:35000/customerquotamanagementapi/api/Customers/Quotas/BalanceInUse?customerId=10+AND+1%3D1</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>text/html</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://ws3.20d2t2infra.com:35000/customerquotamanagementapi/api/Customers/Quotas/BalanceInUse?customerId=10+AND+1%3D1+--+</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>text/html</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://ws3.20d2t2infra.com:35000/customerquotamanagementapi/api/Customers/Quotas/BalanceInUse?customerId=10+UNION+ALL+select+NULL+--+</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>text/html</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://ws3.20d2t2infra.com:35000/customerquotamanagementapi/api/Customers/Quotas/BalanceInUse?customerId=5%3BURL%3D%27https%3A%2F%2F2926556589093797542.owasp.org%27</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>text/html</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://ws3.20d2t2infra.com:35000/customerquotamanagementapi/api/Customers/Quotas/BalanceInUse?customerId=cat+%2Fetc%2Fpasswd</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>text/html</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://ws3.20d2t2infra.com:35000/customerquotamanagementapi/api/Customers/Quotas/BalanceInUse?customerId=http%3A%2F%2F%5C2926556589093797542.owasp.org</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>text/html</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://ws3.20d2t2infra.com:35000/customerquotamanagementapi/api/Customers/Quotas/BalanceInUse?customerId=http%3A%2F%2F2926556589093797542.owasp.org</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>text/html</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://ws3.20d2t2infra.com:35000/customerquotamanagementapi/api/Customers/Quotas/BalanceInUse?customerId=http%3A%2F%2Fwww.google.com</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>text/html</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://ws3.20d2t2infra.com:35000/customerquotamanagementapi/api/Customers/Quotas/BalanceInUse?customerId=http%3A%2F%2Fwww.google.com%2F</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>text/html</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://ws3.20d2t2infra.com:35000/customerquotamanagementapi/api/Customers/Quotas/BalanceInUse?customerId=http%3A%2F%2Fwww.google.com%2Fsearch%3Fq%3DZAP</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>text/html</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://ws3.20d2t2infra.com:35000/customerquotamanagementapi/api/Customers/Quotas/BalanceInUse?customerId=http%3A%2F%2Fwww.google.com%3A80%2F</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>text/html</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://ws3.20d2t2infra.com:35000/customerquotamanagementapi/api/Customers/Quotas/BalanceInUse?customerId=http%3A%2F%2Fwww.google.com%3A80%2Fsearch%3Fq%3DZAP</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>text/html</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://ws3.20d2t2infra.com:35000/customerquotamanagementapi/api/Customers/Quotas/BalanceInUse?customerId=https%3A%2F%2F%5C2926556589093797542.owasp.org</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>text/html</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://ws3.20d2t2infra.com:35000/customerquotamanagementapi/api/Customers/Quotas/BalanceInUse?customerId=https%3A%2F%2F2926556589093797542%252eowasp%252eorg</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>text/html</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://ws3.20d2t2infra.com:35000/customerquotamanagementapi/api/Customers/Quotas/BalanceInUse?customerId=https%3A%2F%2F2926556589093797542.owasp.org</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>text/html</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://ws3.20d2t2infra.com:35000/customerquotamanagementapi/api/Customers/Quotas/BalanceInUse?customerId=URL%3D%27http%3A%2F%2F2926556589093797542.owasp.org%27</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>text/html</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://ws3.20d2t2infra.com:35000/customerquotamanagementapi/api/Customers/Quotas</uri>
+									<method>PUT</method>
+									<param></param>
+									<attack></attack>
+									<evidence>text/html</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+						</instances>
+						<count>146</count>
+						<solution></solution>
+						<otherinfo></otherinfo>
+						<reference></reference>
+						<cweid>-1</cweid>
+						<wascid>-1</wascid>
+						<sourceid>30</sourceid>
+					</alertitem>
+				
+				
+					<alertitem>
+						<pluginid>10049</pluginid>
+						<alertRef>10049</alertRef>
+						<alert>Non-Storable Content</alert>
+						<name>Non-Storable Content</name>
+						<riskcode>0</riskcode>
+						<confidence>2</confidence>
+						<riskdesc>Informational (Medium)</riskdesc>
+						<confidencedesc>Medium</confidencedesc>
+						<desc>&lt;p&gt;The response contents are not storable by caching components such as proxy servers. If the response does not contain sensitive, personal or user-specific information, it may benefit from being stored and cached, to improve performance.&lt;/p&gt;</desc>
+						<instances>
+							
+								<instance>
+									<uri>https://ws3.20d2t2infra.com:35000/customerquotamanagementapi/api/Customers/BusinessUnits/LastQuota?customerId=10&amp;businessUnitId=10</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>401</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://ws3.20d2t2infra.com:35000/customerquotamanagementapi/api/Customers/Quotas/BalanceInUse?customerId=10</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence>401</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://ws3.20d2t2infra.com:35000/customerquotamanagementapi/api/Customers/Quotas</uri>
+									<method>POST</method>
+									<param></param>
+									<attack></attack>
+									<evidence>401</evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+							
+								<instance>
+									<uri>https://ws3.20d2t2infra.com:35000/customerquotamanagementapi/api/Customers/Quotas</uri>
+									<method>PUT</method>
+									<param></param>
+									<attack></attack>
+									<evidence>PUT </evidence>
+									<otherinfo></otherinfo>
+								</instance>
+							
+						</instances>
+						<count>4</count>
+						<solution>&lt;p&gt;The content may be marked as storable by ensuring that the following conditions are satisfied:&lt;/p&gt;&lt;p&gt;The request method must be understood by the cache and defined as being cacheable (&quot;GET&quot;, &quot;HEAD&quot;, and &quot;POST&quot; are currently defined as cacheable)&lt;/p&gt;&lt;p&gt;The response status code must be understood by the cache (one of the 1XX, 2XX, 3XX, 4XX, or 5XX response classes are generally understood)&lt;/p&gt;&lt;p&gt;The &quot;no-store&quot; cache directive must not appear in the request or response header fields&lt;/p&gt;&lt;p&gt;For caching by &quot;shared&quot; caches such as &quot;proxy&quot; caches, the &quot;private&quot; response directive must not appear in the response&lt;/p&gt;&lt;p&gt;For caching by &quot;shared&quot; caches such as &quot;proxy&quot; caches, the &quot;Authorization&quot; header field must not appear in the request, unless the response explicitly allows it (using one of the &quot;must-revalidate&quot;, &quot;public&quot;, or &quot;s-maxage&quot; Cache-Control response directives)&lt;/p&gt;&lt;p&gt;In addition to the conditions above, at least one of the following conditions must also be satisfied by the response:&lt;/p&gt;&lt;p&gt;It must contain an &quot;Expires&quot; header field&lt;/p&gt;&lt;p&gt;It must contain a &quot;max-age&quot; response directive&lt;/p&gt;&lt;p&gt;For &quot;shared&quot; caches such as &quot;proxy&quot; caches, it must contain a &quot;s-maxage&quot; response directive&lt;/p&gt;&lt;p&gt;It must contain a &quot;Cache Control Extension&quot; that allows it to be cached&lt;/p&gt;&lt;p&gt;It must have a status code that is defined as cacheable by default (200, 203, 204, 206, 300, 301, 404, 405, 410, 414, 501).&lt;/p&gt;</solution>
+						<otherinfo></otherinfo>
+						<reference>&lt;p&gt;https://datatracker.ietf.org/doc/html/rfc7234&lt;/p&gt;&lt;p&gt;https://datatracker.ietf.org/doc/html/rfc7231&lt;/p&gt;&lt;p&gt;https://www.w3.org/Protocols/rfc2616/rfc2616-sec13.html&lt;/p&gt;</reference>
+						<cweid>524</cweid>
+						<wascid>13</wascid>
+						<sourceid>12</sourceid>
+					</alertitem>
+				
+				
+					<alertitem>
+						<pluginid>10112</pluginid>
+						<alertRef>10112</alertRef>
+						<alert>Session Management Response Identified</alert>
+						<name>Session Management Response Identified</name>
+						<riskcode>0</riskcode>
+						<confidence>2</confidence>
+						<riskdesc>Informational (Medium)</riskdesc>
+						<confidencedesc>Medium</confidencedesc>
+						<desc>&lt;p&gt;The given response has been identified as containing a session management token. The &apos;Other Info&apos; field contains a set of header tokens that can be used in the Header Based Session Management Method. If the request is in a context which has a Session Management Method set to &quot;Auto-Detect&quot; then this rule will change the session management to use the tokens identified.&lt;/p&gt;</desc>
+						<instances>
+							
+								<instance>
+									<uri>https://ws3.20d2t2infra.com:35000/customerquotamanagementapi-swagger/v1/swagger.json</uri>
+									<method>GET</method>
+									<param>cookiesession1</param>
+									<attack></attack>
+									<evidence>678A3EF70FE9F03C544E2A7C3272837A</evidence>
+									<otherinfo>
+cookie:cookiesession1</otherinfo>
+								</instance>
+							
+						</instances>
+						<count>1</count>
+						<solution>&lt;p&gt;This is an informational alert rather than a vulnerability and so there is nothing to fix.&lt;/p&gt;</solution>
+						<otherinfo>&lt;p&gt;&lt;/p&gt;&lt;p&gt;cookie:cookiesession1&lt;/p&gt;</otherinfo>
+						<reference>&lt;p&gt;https://www.zaproxy.org/docs/desktop/addons/authentication-helper/session-mgmt-id&lt;/p&gt;</reference>
+						<cweid>-1</cweid>
+						<wascid>-1</wascid>
+						<sourceid>1</sourceid>
+					</alertitem>
+				
+				
+					<alertitem>
+						<pluginid>10049</pluginid>
+						<alertRef>10049</alertRef>
+						<alert>Storable and Cacheable Content</alert>
+						<name>Storable and Cacheable Content</name>
+						<riskcode>0</riskcode>
+						<confidence>2</confidence>
+						<riskdesc>Informational (Medium)</riskdesc>
+						<confidencedesc>Medium</confidencedesc>
+						<desc>&lt;p&gt;The response contents are storable by caching components such as proxy servers, and may be retrieved directly from the cache, rather than from the origin server by the caching servers, in response to similar requests from other users. If the response data is sensitive, personal or user-specific, this may result in sensitive information being leaked. In some cases, this may even result in a user gaining complete control of the session of another user, depending on the configuration of the caching components in use in their environment. This is primarily an issue where &quot;shared&quot; caching servers such as &quot;proxy&quot; caches are configured on the local network. This configuration is typically found in corporate or educational environments, for instance.&lt;/p&gt;</desc>
+						<instances>
+							
+								<instance>
+									<uri>https://ws3.20d2t2infra.com:35000/customerquotamanagementapi-swagger/v1/swagger.json</uri>
+									<method>GET</method>
+									<param></param>
+									<attack></attack>
+									<evidence></evidence>
+									<otherinfo>In the absence of an explicitly specified caching lifetime directive in the response, a liberal lifetime heuristic of 1 year was assumed. This is permitted by rfc7234.</otherinfo>
+								</instance>
+							
+						</instances>
+						<count>1</count>
+						<solution>&lt;p&gt;Validate that the response does not contain sensitive, personal or user-specific information. If it does, consider the use of the following HTTP response headers, to limit, or prevent the content being stored and retrieved from the cache by another user:&lt;/p&gt;&lt;p&gt;Cache-Control: no-cache, no-store, must-revalidate, private&lt;/p&gt;&lt;p&gt;Pragma: no-cache&lt;/p&gt;&lt;p&gt;Expires: 0&lt;/p&gt;&lt;p&gt;This configuration directs both HTTP 1.0 and HTTP 1.1 compliant caching servers to not store the response, and to not retrieve the response (without validation) from the cache, in response to a similar request.&lt;/p&gt;</solution>
+						<otherinfo>&lt;p&gt;In the absence of an explicitly specified caching lifetime directive in the response, a liberal lifetime heuristic of 1 year was assumed. This is permitted by rfc7234.&lt;/p&gt;</otherinfo>
+						<reference>&lt;p&gt;https://datatracker.ietf.org/doc/html/rfc7234&lt;/p&gt;&lt;p&gt;https://datatracker.ietf.org/doc/html/rfc7231&lt;/p&gt;&lt;p&gt;https://www.w3.org/Protocols/rfc2616/rfc2616-sec13.html&lt;/p&gt;</reference>
+						<cweid>524</cweid>
+						<wascid>13</wascid>
+						<sourceid>1</sourceid>
+					</alertitem>
+				
+			</alerts>
+		</site>
+	
+</OWASPZAPReport>

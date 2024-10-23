@@ -74,30 +74,54 @@ function postJsonToEndpoint(jsonData, path) {
 // Uso de las funciones
 async function main() {
     try {
-        const jsonData = await convertXMLToJson(args[3]);  // Reemplaza con la ruta de tu archivo XML
+        const jsonData = await convertXMLToJson('OWASP-ZAP-Report-customerquotamanagementapi-151188-1-1.xml');  // Reemplaza con la ruta de tu archivo XML
 
         // Guardar JSON en un archivo
-        //await saveJsonToFile(jsonData, 'resultado.json');  // Especifica la ruta donde quieres guardar el archivo JSON
+        await saveJsonToFile(jsonData, 'resultado.json');  // Especifica la ruta donde quieres guardar el archivo JSON
         // Enviar el JSON mediante POST
         for (var alertitem of jsonData.OWASPZAPReport.site.alerts.alertitem) {
-            //alertitem.alert
-            for (var instance of alertitem.instances.instance) {
-                var data = {
+            var data = null;
+            if (Array.isArray(alertitem.instances.instance)) {
+                for (var instance of alertitem.instances.instance) {
+                    data = {
+                        alert: alertitem.alert,
+                        riskcode: alertitem.riskcode,
+                        confidence: alertitem.confidence,
+                        riskdesc: alertitem.riskdesc,
+                        confidencedesc: alertitem.confidencedesc,
+                        desc: alertitem.desc,
+                        uri: instance.uri,
+                        method: instance.method,
+                        param: instance.param,
+                        attack: instance.attack,
+                        evidence: instance.evidence,
+                        otherinfo: instance.otherinfo,
+                        project: args[0],
+                        repository: args[1],
+                        branch: args[2],
+                        timestamp: new Date()
+                    }
+                    await postJsonToEndpoint(data, "/owasp/doc/" + args[0] + "-" + args[1] + "-" + args[2] + "-" + Buffer.from(data.alert + data.uri + data.method).toString('base64'));
+                }
+            }
+            else {
+                data = {
                     alert: alertitem.alert,
                     riskcode: alertitem.riskcode,
                     confidence: alertitem.confidence,
                     riskdesc: alertitem.riskdesc,
                     confidencedesc: alertitem.confidencedesc,
                     desc: alertitem.desc,
-                    uri: instance.uri,
-                    method: instance.method,
-                    param: instance.param,
-                    attack: instance.attack,
-                    evidence: instance.evidence,
-                    otherinfo: instance.otherinfo,
+                    uri: alertitem.instances.instance.uri,
+                    method: alertitem.instances.instance.method,
+                    param: alertitem.instances.instance.param,
+                    attack: alertitem.instances.instance.attack,
+                    evidence: alertitem.instances.instance.evidence,
+                    otherinfo: alertitem.instances.instance.otherinfo,
                     project: args[0],
                     repository: args[1],
-                    branch: args[2]
+                    branch: args[2],
+                    timestamp: new Date()
                 }
                 await postJsonToEndpoint(data, "/owasp/doc/" + args[0] + "-" + args[1] + "-" + args[2] + "-" + Buffer.from(data.alert + data.uri + data.method).toString('base64'));
             }
