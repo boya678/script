@@ -309,7 +309,7 @@ async function main() {
             if (err) {
                 //console.error(`Error: ${err.message}`);
             } else {
-                //console.log('Respuesta del servidor:', res);
+                console.log('Respuesta del servidor en borrado:', res);
             }
         });
     }
