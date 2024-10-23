@@ -74,7 +74,7 @@ function postJsonToEndpoint(jsonData, path) {
 // Uso de las funciones
 async function main() {
     try {
-        const jsonData = await convertXMLToJson('OWASP-ZAP-Report-customerquotamanagementapi-151188-1-1.xml');  // Reemplaza con la ruta de tu archivo XML
+        const jsonData = await convertXMLToJson(arg[3]);  // Reemplaza con la ruta de tu archivo XML
 
         // Guardar JSON en un archivo
         //await saveJsonToFile(jsonData, 'resultado.json');  // Especifica la ruta donde quieres guardar el archivo JSON
