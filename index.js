@@ -82,7 +82,7 @@ function postJsonToEndpoint(jsonData, path) {
 // Uso de las funciones
 async function main() {
     try {
-        //const jsonData = await convertXMLToJson(args[3]);  // Reemplaza con la ruta de tu archivo XML
+        const jsonData = await convertXMLToJson(args[3]);  // Reemplaza con la ruta de tu archivo XML
 
 
         var datadelete = JSON.stringify({
