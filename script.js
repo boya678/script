@@ -1,7 +1,7 @@
 const fs = require('fs').promises;
 const path = require('path');
 const https = require('https');
-const http = require('http');
+const http = require('http'); 
 const { timeStamp } = require('console');
 const args = process.argv.slice(2);
 
@@ -161,6 +161,7 @@ async function readJsonFile(filePath) {
                             Description: vul.Description,
                             Project: args[3],
                             Repository: args[4],
+                            Branch: args[5],
                             TimeStamp: new Date()
                         })
                         await putRequest("/trivy/doc/" + args[3] + "-" + args[4] + "-" + JSON.parse(datavul).VulnerabilityID, datavul, (err, res) => {
@@ -278,7 +279,7 @@ async function saveHtmlFile(filePath, htmlContent, jsonFilePath, jsonData) {
 // Función principal
 async function main() {
 
-    if (args[4].includes("develop") || args[4].includes("release") || args[4].includes("master")) {
+    if (args[5].includes("develop") || args[5].includes("release") || args[5].includes("master")) {
         var datadelete = JSON.stringify({
 
             "query": {
@@ -286,7 +287,7 @@ async function main() {
                     "must": [
                         { "terms": { "Project.keyword": args[3] } },
                         { "terms": { "Repository.keyword": args[4] } },
-                        { "terms": { "Class.keyword": args[5] } }
+                        { "terms": { "Class.keyword": args[6] } }
                     ]
                 }
             }
