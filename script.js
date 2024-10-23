@@ -305,6 +305,7 @@ async function main() {
             }
 
         })
+        console.log(datadelete)
         await postRequest("/trivy/_delete_by_query", datadelete, (err, res) => {
             if (err) {
                 //console.error(`Error: ${err.message}`);
