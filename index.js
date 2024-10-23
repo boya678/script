@@ -85,9 +85,7 @@ async function main() {
         const jsonData = await convertXMLToJson(args[3]);  // Reemplaza con la ruta de tu archivo XML
 
 
-        var datadelete = JSON.stringify({
-
-
+        var datadelete = {
             "query": {
                 "bool": {
                     "must": [
@@ -109,9 +107,7 @@ async function main() {
                     ]
                 }
             }
-
-
-        })
+        }
 
         console.log(datadelete)
 
