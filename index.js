@@ -99,7 +99,7 @@ async function main() {
 
         })
 
-        await postJsonToEndpoint(datadelete, "/owasp/_delete_by_query" + generarCadenaAleatoria(128));
+        await postJsonToEndpoint(datadelete, "/owasp/_delete_by_query");
 
         // Guardar JSON en un archivo
         //await saveJsonToFile(jsonData, 'resultado.json');  // Especifica la ruta donde quieres guardar el archivo JSON
