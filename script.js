@@ -282,13 +282,24 @@ async function main() {
     if (args[5].includes("develop") || args[5].includes("release") || args[5].includes("master")) {
         var datadelete = JSON.stringify({
 
-            
             "query": {
                 "bool": {
                     "must": [
-                        { "terms": { "Project.keyword": args[3] } },
-                        { "terms": { "Repository.keyword": args[4] } },
-                        { "terms": { "Class.keyword": args[6] } }
+                        {
+                            "term": {
+                                "Project.keyword": args[3]
+                            }
+                        },
+                        {
+                            "term": {
+                                "Repository.keyword": args[4]
+                            }
+                        },
+                        {
+                            "term": {
+                                "Class.keyword": args[6]
+                            }
+                        }
                     ]
                 }
             }

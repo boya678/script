@@ -93,17 +93,17 @@ async function main() {
                     "must": [
                         {
                             "term": {
-                                "project": args[0]
+                                "project.keyword": args[0]
                             }
                         },
                         {
                             "term": {
-                                "repository": args[1]
+                                "repository.keyword": args[1]
                             }
                         },
                         {
                             "term": {
-                                "branch": args[2]
+                                "branch.keyword": args[2]
                             }
                         }
                     ]
