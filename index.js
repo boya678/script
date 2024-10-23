@@ -47,9 +47,9 @@ function postJsonToEndpoint(jsonData, path, method) {
         const data = JSON.stringify(jsonData);
 
         const options = {
-            hostname: process.env.URL_ELASTIC,  // Solo el hostname, sin "https://"
-            port: 9200,  // Puerto 443 para HTTPS
-            path: path,  // La ruta de tu endpoint
+            hostname: process.env.URL_ELASTIC, 
+            port: 9200, 
+            path: path,  
             method: method,
             headers: {
                 'Content-Type': 'application/json',
@@ -111,7 +111,7 @@ async function main() {
 
         console.log(datadelete)
 
-        console.log(await postJsonToEndpoint(datadelete, "/owasp/_delete_by_query"), "POST");
+        console.log(await postJsonToEndpoint(datadelete, "/owasp/_delete_by_query","POST"));
 
         // Guardar JSON en un archivo
         //await saveJsonToFile(jsonData, 'resultado.json');  // Especifica la ruta donde quieres guardar el archivo JSON
