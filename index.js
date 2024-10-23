@@ -74,7 +74,7 @@ function postJsonToEndpoint(jsonData, path) {
 // Uso de las funciones
 async function main() {
     try {
-        const jsonData = await convertXMLToJson('archivo.xml');  // Reemplaza con la ruta de tu archivo XML
+        const jsonData = await convertXMLToJson(args[3]);  // Reemplaza con la ruta de tu archivo XML
 
         // Guardar JSON en un archivo
         //await saveJsonToFile(jsonData, 'resultado.json');  // Especifica la ruta donde quieres guardar el archivo JSON
