@@ -115,7 +115,7 @@ async function main() {
 
         console.log(datadelete)
 
-        await postJsonToEndpoint(datadelete, "/owasp/_delete_by_query");
+        console.log(await postJsonToEndpoint(datadelete, "/owasp/_delete_by_query"));
 
         // Guardar JSON en un archivo
         //await saveJsonToFile(jsonData, 'resultado.json');  // Especifica la ruta donde quieres guardar el archivo JSON
