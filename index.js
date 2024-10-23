@@ -2,6 +2,14 @@ const fs = require('fs');
 const xml2js = require('xml2js');
 const http = require('http');
 const args = process.argv.slice(2);
+const crypto = require('crypto');
+
+// Función para generar una cadena aleatoria de longitud específica
+function generarCadenaAleatoria(longitud) {
+    return crypto.randomBytes(longitud)
+                 .toString('hex') // Convertir a hexadecimal
+                 .slice(0, longitud); // Asegurarse de que tenga la longitud deseada
+}
 
 // Función para leer y convertir XML a JSON
 function convertXMLToJson(xmlFilePath) {
@@ -76,56 +84,84 @@ async function main() {
     try {
         const jsonData = await convertXMLToJson(args[3]);  // Reemplaza con la ruta de tu archivo XML
 
+
+        var datadelete = JSON.stringify({
+
+            "query": {
+                "bool": {
+                    "must": [
+                        { "terms": { "project.keyword": args[0] } },
+                        { "terms": { "repository.keyword": args[1] } },
+                        { "terms": { "branch.keyword": args[2] } }
+                    ]
+                }
+            }
+
+        })
+
+        await postJsonToEndpoint(datadelete, "/owasp/_delete_by_query" + generarCadenaAleatoria(128));
+
         // Guardar JSON en un archivo
         //await saveJsonToFile(jsonData, 'resultado.json');  // Especifica la ruta donde quieres guardar el archivo JSON
         // Enviar el JSON mediante POST
+        var cont=0;
         for (var alertitem of jsonData.OWASPZAPReport.site.alerts.alertitem) {
             var data = null;
             if (Array.isArray(alertitem.instances.instance)) {
                 for (var instance of alertitem.instances.instance) {
+                    cont++
                     data = {
                         alert: alertitem.alert,
                         riskcode: alertitem.riskcode,
                         confidence: alertitem.confidence,
                         riskdesc: alertitem.riskdesc,
+                        solution: alertitem.solution,
+                        alertotherinfo: alertitem.otherinfo,
                         confidencedesc: alertitem.confidencedesc,
+                        reference: alertitem.reference,
                         desc: alertitem.desc,
                         uri: instance.uri,
                         method: instance.method,
                         param: instance.param,
                         attack: instance.attack,
                         evidence: instance.evidence,
-                        otherinfo: instance.otherinfo,
+                        instanceotherinfo: instance.otherinfo,
                         project: args[0],
                         repository: args[1],
                         branch: args[2],
                         timestamp: new Date()
                     }
-                    await postJsonToEndpoint(data, "/owasp/doc/" + args[0] + "-" + args[1] + "-" + args[2] + "-" + Buffer.from(data.alert + data.uri + data.method).toString('base64'));
+                    await postJsonToEndpoint(data, "/owasp/doc/" + generarCadenaAleatoria(128));
                 }
             }
             else {
+                cont++
                 data = {
                     alert: alertitem.alert,
                     riskcode: alertitem.riskcode,
                     confidence: alertitem.confidence,
                     riskdesc: alertitem.riskdesc,
                     confidencedesc: alertitem.confidencedesc,
+                    solution: alertitem.solution,
+                    alertotherinfo: alertitem.otherinfo,
+                    confidencedesc: alertitem.confidencedesc,
+                    reference: alertitem.reference,
                     desc: alertitem.desc,
                     uri: alertitem.instances.instance.uri,
                     method: alertitem.instances.instance.method,
                     param: alertitem.instances.instance.param,
                     attack: alertitem.instances.instance.attack,
                     evidence: alertitem.instances.instance.evidence,
-                    otherinfo: alertitem.instances.instance.otherinfo,
+                    instanceotherinfo: alertitem.instances.instance.otherinfo,
                     project: args[0],
                     repository: args[1],
                     branch: args[2],
                     timestamp: new Date()
                 }
-                await postJsonToEndpoint(data, "/owasp/doc/" + args[0] + "-" + args[1] + "-" + args[2] + "-" + Buffer.from(data.alert + data.uri + data.method).toString('base64'));
+                await postJsonToEndpoint(data, "/owasp/doc/" + generarCadenaAleatoria(128));
             }
         }
+        console.log(cont)
     } catch (error) {
         console.error('Error:', error);
     }
