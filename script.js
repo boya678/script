@@ -146,14 +146,15 @@ async function readJsonFile(filePath) {
                         } else {
                             vul.ExploitScore = ""
                         }
-                        if(!vul.ExploitScore=="not found"){
+                        if(!vul.ExploitScore=="not found" && !vul.Severity=="CRITICAL"){
                             if(vul.ExploitScore>=7){
                                 vul.red=true
                             }else{
                                 vul.red=false
                             }
+                        } else if(vul.Severity=="CRITICAL"){
+                                vul.red=true
                         }
-                       
 
                         const datavul = JSON.stringify({
                             VulnerabilityID: vul.VulnerabilityID,
