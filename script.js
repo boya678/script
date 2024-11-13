@@ -136,6 +136,7 @@ async function readJsonFile(filePath) {
                     try {
                         const data = await fetchCveData(vul.VulnerabilityID);
                         await wait(0);
+                        vul.red=false
                         var metric = data.vulnerabilities[0].cve.metrics
                         if (metric.hasOwnProperty('cvssMetricV31')) {
                             vul.ExploitScore = metric.cvssMetricV31[0].exploitabilityScore
@@ -148,16 +149,15 @@ async function readJsonFile(filePath) {
                         }
                         if(!vul.ExploitScore=="not found" && !vul.Severity=="CRITICAL"){
                             if(vul.ExploitScore>=7){
-                                vul.red=true
-                            }else{
-                                vul.red=false
+                                vul.Red=true
                             }
                         } else if(vul.Severity=="CRITICAL"){
-                                vul.red=true
+                                vul.Red=true
                         }
 
                         const datavul = JSON.stringify({
                             VulnerabilityID: vul.VulnerabilityID,
+                            brake: vul.Red,
                             Type: result.Type,
                             Class: result.Class,
                             Target: result.Target,
@@ -224,6 +224,7 @@ function convertJsonToHtml(jsonData) {
             <tr>
                 <th>Target</th>
                 <th>Vulnerability ID</th>
+                <th>Brake Pipeline</th>
                 <th>Exploit Score</th>
                 <th>Package Name</th>
                 <th>Installed Version</th>
@@ -239,7 +240,7 @@ function convertJsonToHtml(jsonData) {
     for (var results of jsonData.Results) {
         try {
             results.Vulnerabilities.forEach(vul => {
-                if(vul.red){
+                if(vul.Red){
                     html += `
                     <tr class="error">
                     `
@@ -252,6 +253,7 @@ function convertJsonToHtml(jsonData) {
             html += `
                 <td>${results.Target}</td>
                 <td>${vul.VulnerabilityID}</td>
+                <td>${vul.Red}</td>
                 <td>${vul.ExploitScore}</td>
                 <td>${vul.PkgName}</td>
                 <td>${vul.InstalledVersion}</td>
