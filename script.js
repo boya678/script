@@ -144,8 +144,16 @@ async function readJsonFile(filePath) {
                         } else if (metric.hasOwnProperty('cvssMetricV2')) {
                             vul.ExploitScore = metric.cvssMetricV2[0].exploitabilityScore
                         } else {
-                            vul.ExploitScore = "not found"
+                            vul.ExploitScore = ""
                         }
+                        if(!vul.ExploitScore=="not found"){
+                            if(vul.ExploitScore>=7){
+                                vul.red=true
+                            }else{
+                                vul.red=false
+                            }
+                        }
+                       
 
                         const datavul = JSON.stringify({
                             VulnerabilityID: vul.VulnerabilityID,
@@ -204,6 +212,7 @@ function convertJsonToHtml(jsonData) {
         th { background-color: #00BF6F; }
         h1 { text-align: center; }
         h2 { text-align: center; }
+        .error {color: #ffffff; background-color: #bf0000}
     </style>
 </head>
 <body>
@@ -229,8 +238,17 @@ function convertJsonToHtml(jsonData) {
     for (var results of jsonData.Results) {
         try {
             results.Vulnerabilities.forEach(vul => {
-                html += `
-            <tr>
+                if(vul.red){
+                    html += `
+                    <tr class="error">
+                    `
+                }else{
+                    html += `
+                    <tr>
+                    `
+                }
+
+            html += `
                 <td>${results.Target}</td>
                 <td>${vul.VulnerabilityID}</td>
                 <td>${vul.ExploitScore}</td>
