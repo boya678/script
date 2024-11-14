@@ -128,6 +128,7 @@ var i = 0;
 async function readJsonFile(filePath) {
     try {
         const data = await fs.readFile(filePath, 'utf-8');
+        var nvd
         var datajson = JSON.parse(data)
         const url = 'https://services.nvd.nist.gov/rest/json/cves/2.0?cveId=';
         for (var result of datajson.Results) {
@@ -152,6 +153,7 @@ async function readJsonFile(filePath) {
                         } catch (error) {
                             vul.ExploitScore = "not found"
                             console.log("Error obteniendo exploit score para vulneabilitad: " + vul.VulnerabilityID)
+                            console.log(error)
                             console.log(nvd)
                         }
                         if (!vul.ExploitScore == "not found" && !vul.Severity == "CRITICAL") {
