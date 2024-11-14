@@ -152,7 +152,7 @@ async function readJsonFile(filePath) {
                             }
                         } catch (error) {
                             vul.ExploitScore = "not found"
-                            console.log("Error obteniendo exploit score para vulneabilitad: " + vul.VulnerabilityID)
+                            console.log("Error obteniendo exploit score para vulnerabilidad: " + vul.VulnerabilityID)
                             console.log(error)
                             console.log(nvd)
                         }
