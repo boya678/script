@@ -136,9 +136,7 @@ async function readJsonFile(filePath) {
                     try {
                         try {
                             const data = await fetchCveData(vul.VulnerabilityID);
-                        } catch (error) {
-                            console.log("Error obteniendo exploit score para vulneabilitad: " + vul.VulnerabilityID)
-                        }
+                        
                         await wait(0);
                         vul.red = false
                         var metric = data.vulnerabilities[0].cve.metrics
@@ -149,7 +147,12 @@ async function readJsonFile(filePath) {
                         } else if (metric.hasOwnProperty('cvssMetricV2')) {
                             vul.ExploitScore = metric.cvssMetricV2[0].exploitabilityScore
                         } else {
-                            vul.ExploitScore = ""
+                            vul.ExploitScore = "not found"
+                        }
+                        } catch (error) {
+                            vul.ExploitScore = "not found"
+                            console.log("Error obteniendo exploit score para vulneabilitad: " + vul.VulnerabilityID)
+                            console.log(data)
                         }
                         if (!vul.ExploitScore == "not found" && !vul.Severity == "CRITICAL") {
                             if (vul.ExploitScore >= 7) {
