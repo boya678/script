@@ -299,7 +299,7 @@ async function saveHtmlFile(filePath, htmlContent, jsonFilePath, jsonData) {
 
 // Función principal
 async function main() {
-    var throwexception=false
+    var throwexception = false
     if (args[5].includes("develop") || args[5].includes("release") || args[5].includes("master")) {
         var datadelete = JSON.stringify({
 
@@ -343,19 +343,22 @@ async function main() {
         const jsonData = await readJsonFile(jsonFilePath);
         const htmlContent = convertJsonToHtml(jsonData);
         await saveHtmlFile(htmlFilePath, htmlContent, jsonFilePath, jsonData);
-        for (var results of jsonData.Results) {
-            for (var vul of results.Vulnerabilities) {
-                if (vul.red) {
-                    throwexception=true
-                    console.log(`***** Pipeline fallido por la vulnerabilidad ${vul.VulnerabilityID} en el paquete ${vul.PkgName} *********`)
+        if (args[0] == "ci") {
+            for (var results of jsonData.Results) {
+                for (var vul of results.Vulnerabilities) {
+                    if (vul.red) {
+                        throwexception = true
+                        console.log(`***** Pipeline fallido por la vulnerabilidad ${vul.VulnerabilityID} en el paquete ${vul.PkgName} *********`)
+                    }
                 }
             }
         }
     } catch (error) {
         console.error('Error en el proceso:', error);
     }
-    throw new Error('Pipeline fallido por vulnerabilidades con criticas encontradas y exploit score mayor de 7, por favor revisar informe trivy en pestaña, dependencias impactadas marcadas en rojo');
-
+    if (args[0] == "ci") {
+        throw new Error('Pipeline fallido por vulnerabilidades con criticas encontradas y exploit score mayor de 7, por favor revisar informe trivy en pestaña, dependencias impactadas marcadas en rojo');
+    }
 }
 
 // Ejecutar la función principal
