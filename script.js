@@ -134,7 +134,7 @@ async function readJsonFile(filePath) {
         for (var result of datajson.Results) {
             try {
                 for (var vul of result.Vulnerabilities) {
-                    vul.red = false
+                    vul.Red = false
                     try {
                         try {
                             nvd = await fetchCveData(vul.VulnerabilityID);
