@@ -357,7 +357,7 @@ async function main() {
                 for (var vul of results.Vulnerabilities) {
                     if (vul.Red) {
                         throwexception = true
-                        console.log(`***** Pipeline fallido por la vulnerabilidad ${vul.VulnerabilityID} en el paquete ${vul.PkgName} *********`)
+                        console.log(`##[error] ***** Pipeline fallido por la vulnerabilidad ${vul.VulnerabilityID} en el paquete ${vul.PkgName} *********`)
                     }
                 }
             }
@@ -366,7 +366,7 @@ async function main() {
         console.error('Error en el proceso:', error);
     }
     if (args[0] == "ci" && throwexception) {
-        throw new Error('ERROR: Pipeline fallido por vulnerabilidades criticas encontradas y exploit score mayor de 7, por favor revisar informe trivy en pestaña, dependencias impactadas marcadas en rojo');
+        throw new Error('##[error] ERROR: Pipeline fallido por vulnerabilidades criticas encontradas y exploit score mayor de 7, por favor revisar informe trivy en pestaña, dependencias impactadas marcadas en rojo');
     }
 }
 
