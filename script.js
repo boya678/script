@@ -366,7 +366,7 @@ async function main() {
         console.error('Error en el proceso:', error);
     }
     if (args[0] == "ci" && throwexception) {
-        throw new Error('ERROR: Pipeline fallido por vulnerabilidades con criticas encontradas y exploit score mayor de 7, por favor revisar informe trivy en pestaña, dependencias impactadas marcadas en rojo');
+        throw new Error('ERROR: Pipeline fallido por vulnerabilidades criticas encontradas y exploit score mayor de 7, por favor revisar informe trivy en pestaña, dependencias impactadas marcadas en rojo');
     }
 }
 
