@@ -136,10 +136,10 @@ async function readJsonFile(filePath) {
                     vul.red = false
                     try {
                         try {
-                            const data = await fetchCveData(vul.VulnerabilityID);
+                            const nvd = await fetchCveData(vul.VulnerabilityID);
 
                             await wait(0);
-                            var metric = data.vulnerabilities[0].cve.metrics
+                            var metric = nvd.vulnerabilities[0].cve.metrics
                             if (metric.hasOwnProperty('cvssMetricV31')) {
                                 vul.ExploitScore = metric.cvssMetricV31[0].exploitabilityScore
                             } else if (metric.hasOwnProperty('cvssMetricV30')) {
@@ -152,7 +152,7 @@ async function readJsonFile(filePath) {
                         } catch (error) {
                             vul.ExploitScore = "not found"
                             console.log("Error obteniendo exploit score para vulneabilitad: " + vul.VulnerabilityID)
-                            console.log(data)
+                            console.log(nvd)
                         }
                         if (!vul.ExploitScore == "not found" && !vul.Severity == "CRITICAL") {
                             if (vul.ExploitScore >= 7) {
