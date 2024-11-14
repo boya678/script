@@ -355,7 +355,7 @@ async function main() {
         if (args[0] == "ci") {
             for (var results of jsonData.Results) {
                 for (var vul of results.Vulnerabilities) {
-                    if (vul.red) {
+                    if (vul.Red) {
                         throwexception = true
                         console.log(`***** Pipeline fallido por la vulnerabilidad ${vul.VulnerabilityID} en el paquete ${vul.PkgName} *********`)
                     }
