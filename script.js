@@ -1,7 +1,7 @@
 const fs = require('fs').promises;
 const path = require('path');
 const https = require('https');
-const http = require('http'); 
+const http = require('http');
 const { timeStamp } = require('console');
 const args = process.argv.slice(2);
 
@@ -136,7 +136,7 @@ async function readJsonFile(filePath) {
                     try {
                         const data = await fetchCveData(vul.VulnerabilityID);
                         await wait(0);
-                        vul.red=false
+                        vul.red = false
                         var metric = data.vulnerabilities[0].cve.metrics
                         if (metric.hasOwnProperty('cvssMetricV31')) {
                             vul.ExploitScore = metric.cvssMetricV31[0].exploitabilityScore
@@ -147,12 +147,12 @@ async function readJsonFile(filePath) {
                         } else {
                             vul.ExploitScore = ""
                         }
-                        if(!vul.ExploitScore=="not found" && !vul.Severity=="CRITICAL"){
-                            if(vul.ExploitScore>=7){
-                                vul.Red=true
+                        if (!vul.ExploitScore == "not found" && !vul.Severity == "CRITICAL") {
+                            if (vul.ExploitScore >= 7) {
+                                vul.Red = true
                             }
-                        } else if(vul.Severity=="CRITICAL"){
-                                vul.Red=true
+                        } else if (vul.Severity == "CRITICAL") {
+                            vul.Red = true
                         }
 
                         const datavul = JSON.stringify({
@@ -240,17 +240,17 @@ function convertJsonToHtml(jsonData) {
     for (var results of jsonData.Results) {
         try {
             results.Vulnerabilities.forEach(vul => {
-                if(vul.Red){
+                if (vul.Red) {
                     html += `
                     <tr class="error">
                     `
-                }else{
+                } else {
                     html += `
                     <tr>
                     `
                 }
 
-            html += `
+                html += `
                 <td>${results.Target}</td>
                 <td>${vul.VulnerabilityID}</td>
                 <td>${vul.Red}</td>
@@ -299,7 +299,7 @@ async function saveHtmlFile(filePath, htmlContent, jsonFilePath, jsonData) {
 
 // Función principal
 async function main() {
-
+    var throwexception=false
     if (args[5].includes("develop") || args[5].includes("release") || args[5].includes("master")) {
         var datadelete = JSON.stringify({
 
@@ -343,9 +343,19 @@ async function main() {
         const jsonData = await readJsonFile(jsonFilePath);
         const htmlContent = convertJsonToHtml(jsonData);
         await saveHtmlFile(htmlFilePath, htmlContent, jsonFilePath, jsonData);
+        for (var results of jsonData.Results) {
+            for (var vul of results.Vulnerabilities) {
+                if (vul.red) {
+                    throwexception=true
+                    console.log(`***** Pipeline fallido por la vulnerabilidad ${vul.VulnerabilityID} en el paquete ${vul.PkgName} *********`)
+                }
+            }
+        }
     } catch (error) {
         console.error('Error en el proceso:', error);
     }
+    throw new Error('Pipeline fallido por vulnerabilidades con criticas encontradas y exploit score mayor de 7, por favor revisar informe trivy en pestaña, dependencias impactadas marcadas en rojo');
+
 }
 
 // Ejecutar la función principal
