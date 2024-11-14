@@ -134,7 +134,11 @@ async function readJsonFile(filePath) {
             try {
                 for (var vul of result.Vulnerabilities) {
                     try {
-                        const data = await fetchCveData(vul.VulnerabilityID);
+                        try {
+                            const data = await fetchCveData(vul.VulnerabilityID);
+                        } catch (error) {
+                            console.log("Error obteniendo exploit score para vulneabilitad: " + vul.VulnerabilityID)
+                        }
                         await wait(0);
                         vul.red = false
                         var metric = data.vulnerabilities[0].cve.metrics
