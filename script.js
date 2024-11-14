@@ -133,22 +133,22 @@ async function readJsonFile(filePath) {
         for (var result of datajson.Results) {
             try {
                 for (var vul of result.Vulnerabilities) {
+                    vul.red = false
                     try {
                         try {
                             const data = await fetchCveData(vul.VulnerabilityID);
-                        
-                        await wait(0);
-                        vul.red = false
-                        var metric = data.vulnerabilities[0].cve.metrics
-                        if (metric.hasOwnProperty('cvssMetricV31')) {
-                            vul.ExploitScore = metric.cvssMetricV31[0].exploitabilityScore
-                        } else if (metric.hasOwnProperty('cvssMetricV30')) {
-                            vul.ExploitScore = metric.cvssMetricV30[0].exploitabilityScore
-                        } else if (metric.hasOwnProperty('cvssMetricV2')) {
-                            vul.ExploitScore = metric.cvssMetricV2[0].exploitabilityScore
-                        } else {
-                            vul.ExploitScore = "not found"
-                        }
+
+                            await wait(0);
+                            var metric = data.vulnerabilities[0].cve.metrics
+                            if (metric.hasOwnProperty('cvssMetricV31')) {
+                                vul.ExploitScore = metric.cvssMetricV31[0].exploitabilityScore
+                            } else if (metric.hasOwnProperty('cvssMetricV30')) {
+                                vul.ExploitScore = metric.cvssMetricV30[0].exploitabilityScore
+                            } else if (metric.hasOwnProperty('cvssMetricV2')) {
+                                vul.ExploitScore = metric.cvssMetricV2[0].exploitabilityScore
+                            } else {
+                                vul.ExploitScore = "not found"
+                            }
                         } catch (error) {
                             vul.ExploitScore = "not found"
                             console.log("Error obteniendo exploit score para vulneabilitad: " + vul.VulnerabilityID)
@@ -189,7 +189,7 @@ async function readJsonFile(filePath) {
                         });
 
                     } catch (error) {
-                        console.error('Error al obtener los datos:', error.message);
+                        console.error('Error al obtener los datos:', error);
                     }
                     i++;
                 }
