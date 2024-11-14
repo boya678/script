@@ -137,7 +137,7 @@ async function readJsonFile(filePath) {
                     vul.red = false
                     try {
                         try {
-                            const nvd = await fetchCveData(vul.VulnerabilityID);
+                            nvd = await fetchCveData(vul.VulnerabilityID);
 
                             await wait(0);
                             var metric = nvd.vulnerabilities[0].cve.metrics
