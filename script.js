@@ -182,7 +182,7 @@ async function readJsonFile(filePath) {
                             Branch: args[5],
                             TimeStamp: new Date()
                         })
-                        await putRequest("/trivy/doc/" + args[3] + "-" + args[4] + "-" + JSON.parse(datavul).VulnerabilityID, datavul, (err, res) => {
+                        await putRequest("/elastic/trivy/doc/" + args[3] + "-" + args[4] + "-" + JSON.parse(datavul).VulnerabilityID, datavul, (err, res) => {
                             if (err) {
                                 //console.error(`Error: ${err.message}`);
                             } else {
@@ -336,7 +336,7 @@ async function main() {
 
         })
         console.log(datadelete)
-        await postRequest("/trivy/_delete_by_query", datadelete, (err, res) => {
+        await postRequest("/elastic/trivy/_delete_by_query", datadelete, (err, res) => {
             if (err) {
                 //console.error(`Error: ${err.message}`);
             } else {
