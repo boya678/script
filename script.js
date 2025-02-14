@@ -53,7 +53,7 @@ async function postRequest(path, data, callback) {
         hostname: process.env.URL_ELASTIC,
         path: path,
         method: 'POST',
-        port: 9200,
+        port: 80,
         headers: {
             'Content-Type': 'application/json',
             'Content-Length': Buffer.byteLength(data),
