@@ -111,7 +111,7 @@ async function main() {
 
         console.log(datadelete)
 
-        console.log(await postJsonToEndpoint(datadelete, "/owasp/_delete_by_query","POST"));
+        console.log(await postJsonToEndpoint(datadelete, "/elastic/owasp/_delete_by_query","POST"));
 
         // Guardar JSON en un archivo
         //await saveJsonToFile(jsonData, 'resultado.json');  // Especifica la ruta donde quieres guardar el archivo JSON
@@ -143,7 +143,7 @@ async function main() {
                         branch: args[2],
                         timestamp: new Date()
                     }
-                    await postJsonToEndpoint(data, "/owasp/doc/" + generarCadenaAleatoria(128), "PUT");
+                    await postJsonToEndpoint(data, "/elastic/owasp/doc/" + generarCadenaAleatoria(128), "PUT");
                 }
             }
             else {
@@ -170,7 +170,7 @@ async function main() {
                     branch: args[2],
                     timestamp: new Date()
                 }
-                await postJsonToEndpoint(data, "/owasp/doc/" + generarCadenaAleatoria(128),"PUT");
+                await postJsonToEndpoint(data, "/elastic/owasp/doc/" + generarCadenaAleatoria(128),"PUT");
             }
         }
         console.log(cont)
