@@ -48,7 +48,7 @@ function postJsonToEndpoint(jsonData, path, method) {
 
         const options = {
             hostname: process.env.URL_ELASTIC, 
-            port: 9200, 
+            port: 80, 
             path: path,  
             method: method,
             headers: {
