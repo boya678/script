@@ -354,11 +354,15 @@ async function main() {
         await saveHtmlFile(htmlFilePath, htmlContent, jsonFilePath, jsonData);
         if (args[0] == "ci") {
             for (var results of jsonData.Results) {
-                for (var vul of results.Vulnerabilities) {
-                    if (vul.Red) {
-                        throwexception = true
-                        console.log(`##[error] ***** Pipeline fallido por la vulnerabilidad ${vul.VulnerabilityID} en el paquete ${vul.PkgName} *********`)
+                try {
+                    for (var vul of results.Vulnerabilities) {
+                        if (vul.Red) {
+                            throwexception = true
+                            console.log(`##[error] ***** Pipeline fallido por la vulnerabilidad ${vul.VulnerabilityID} en el paquete ${vul.PkgName} *********`)
+                        }
                     }
+                } catch (error) {
+                    console.error('Error en el proceso:', error);
                 }
             }
         }
