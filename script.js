@@ -191,7 +191,7 @@ async function readJsonFile(filePath) {
                         });
 
                     } catch (error) {
-                        console.error('Error al obtener los datos:', error);
+                       
                     }
                     i++;
                 }
