@@ -162,7 +162,8 @@ async function readJsonFile(filePath) {
                             TimeStamp: new Date()
                         })
                         try {
-                            await putRequest("/elastic/trivy/doc/" + args[3] + "-" + args[4] + "-" + JSON.parse(datavul).VulnerabilityID, datavul);
+                            const docId = args[3] + "-" + args[4] + "-" + vul.PkgID.replace(/\//g, "_") + "-" + vul.VulnerabilityID;
+                            await putRequest("/elastic/trivy/doc/" + docId, datavul);
                         } catch (err) {
                             console.error(`Error indexando vulnerabilidad ${vul.VulnerabilityID}: ${err.message}`);
                         }
