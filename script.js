@@ -115,25 +115,29 @@ async function readJsonFile(filePath) {
                 for (var vul of result.Vulnerabilities) {
                     vul.Red = false
                     try {
-                        try {
-                            nvd = await fetchCveData(vul.VulnerabilityID);
+                        if (typeof vul.ExploitScore === 'number') {
+                            console.log("ExploitScore ya existe para " + vul.VulnerabilityID + ": " + vul.ExploitScore + ", omitiendo NVD")
+                        } else {
+                            try {
+                                nvd = await fetchCveData(vul.VulnerabilityID);
 
-                            await wait(600);
-                            var metric = nvd.vulnerabilities[0].cve.metrics
-                            if (metric.hasOwnProperty('cvssMetricV31')) {
-                                vul.ExploitScore = metric.cvssMetricV31[0].exploitabilityScore
-                            } else if (metric.hasOwnProperty('cvssMetricV30')) {
-                                vul.ExploitScore = metric.cvssMetricV30[0].exploitabilityScore
-                            } else if (metric.hasOwnProperty('cvssMetricV2')) {
-                                vul.ExploitScore = metric.cvssMetricV2[0].exploitabilityScore
-                            } else {
+                                await wait(600);
+                                var metric = nvd.vulnerabilities[0].cve.metrics
+                                if (metric.hasOwnProperty('cvssMetricV31')) {
+                                    vul.ExploitScore = metric.cvssMetricV31[0].exploitabilityScore
+                                } else if (metric.hasOwnProperty('cvssMetricV30')) {
+                                    vul.ExploitScore = metric.cvssMetricV30[0].exploitabilityScore
+                                } else if (metric.hasOwnProperty('cvssMetricV2')) {
+                                    vul.ExploitScore = metric.cvssMetricV2[0].exploitabilityScore
+                                } else {
+                                    vul.ExploitScore = "not found"
+                                }
+                            } catch (error) {
                                 vul.ExploitScore = "not found"
+                                console.log("Error obteniendo exploit score para vulnerabilidad: " + vul.VulnerabilityID)
+                                console.log(error)
+                                console.log(nvd)
                             }
-                        } catch (error) {
-                            vul.ExploitScore = "not found"
-                            console.log("Error obteniendo exploit score para vulnerabilidad: " + vul.VulnerabilityID)
-                            console.log(error)
-                            console.log(nvd)
                         }
                         if (vul.ExploitScore === "not found" && vul.CVSS && Object.keys(vul.CVSS).length > 0) {
                             const scores = Object.values(vul.CVSS)
