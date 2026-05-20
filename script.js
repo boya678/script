@@ -112,6 +112,7 @@ async function readJsonFile(filePath) {
         const url = 'https://services.nvd.nist.gov/rest/json/cves/2.0?cveId=';
         const totalResults = datajson.Results.reduce((acc, r) => acc + (r.Vulnerabilities ? r.Vulnerabilities.length : 0), 0);
         console.log(`[INFO] Iniciando procesamiento: ${datajson.Results.length} target(s), ${totalResults} vulnerabilidad(es) en total`);
+        const uniqueDocIds = new Set();
         for (var result of datajson.Results) {
             console.log(`[TARGET] ${result.Target || '(sin target)'} | Type: ${result.Type || '-'}`);
             try {
@@ -189,6 +190,7 @@ async function readJsonFile(filePath) {
                         if (args[5].includes("develop") || args[5].includes("release") || args[5].includes("master")) {
                             try {
                                 const docId = args[3] + "-" + args[4] + "-" + vul.PkgName.replace(/\//g, "_") + "-" + vul.VulnerabilityID + "-" + args[0];
+                                uniqueDocIds.add(docId);
                                 await putRequest("/elastic/trivy/doc/" + docId, datavul);
                                 console.log(`  [ELASTIC OK] ${vul.VulnerabilityID} indexado (doc: ${docId})`)
                             } catch (err) {
@@ -205,7 +207,7 @@ async function readJsonFile(filePath) {
 
             }
         }
-        console.log(`[INFO] Procesamiento finalizado: ${i} vulnerabilidad(es) procesadas`)
+        console.log(`[INFO] Procesamiento finalizado: ${i} vulnerabilidad(es) procesadas | ${uniqueDocIds.size} documentos unicos indexados en Elastic`)
         return datajson;
     } catch (error) {
         console.error('Error al leer o parsear el archivo JSON:', error);
