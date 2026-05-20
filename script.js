@@ -125,7 +125,7 @@ async function readJsonFile(filePath) {
                             try {
                                 nvd = await fetchCveData(vul.VulnerabilityID);
 
-                                await wait(600);
+                                await wait(100);
                                 var metric = nvd.vulnerabilities[0].cve.metrics
                                 if (metric.hasOwnProperty('cvssMetricV31')) {
                                     vul.ExploitScore = metric.cvssMetricV31[0].exploitabilityScore
