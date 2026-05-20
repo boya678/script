@@ -188,6 +188,15 @@ async function readJsonFile(filePath) {
     }
 }
 
+function escapeHtml(str) {
+    if (str == null) return '';
+    return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+}
+
 // Función para convertir JSON a HTML
 function convertJsonToHtml(jsonData) {
     let html = `
@@ -243,21 +252,21 @@ function convertJsonToHtml(jsonData) {
                 }
 
                 html += `
-                <td>${results.Target}</td>
-                <td>${vul.VulnerabilityID}</td>
+                <td>${escapeHtml(results.Target)}</td>
+                <td>${escapeHtml(vul.VulnerabilityID)}</td>
                 <td>${vul.Red}</td>
                 <td>${vul.ExploitScore}</td>
-                <td>${vul.PkgName}</td>
-                <td>${vul.InstalledVersion}</td>
-                <td>${vul.FixedVersion}</td>
-                <td>${vul.Status}</td>
-                <td>${vul.Severity}</td>
-                <td><a href="${vul.PrimaryURL}" target="_blank">${vul.Title}</a></td>
-                <td>${vul.Description}</td>
+                <td>${escapeHtml(vul.PkgName)}</td>
+                <td>${escapeHtml(vul.InstalledVersion)}</td>
+                <td>${escapeHtml(vul.FixedVersion)}</td>
+                <td>${escapeHtml(vul.Status)}</td>
+                <td>${escapeHtml(vul.Severity)}</td>
+                <td><a href="${escapeHtml(vul.PrimaryURL)}" target="_blank">${escapeHtml(vul.Title)}</a></td>
+                <td>${escapeHtml(vul.Description)}</td>
                 <td>
                     <ul>`;
                 (vul.References || []).forEach(ref => {
-                    html += `<li><a href="${ref}" target="_blank">${ref}</a></li>`;
+                    html += `<li><a href="${escapeHtml(ref)}" target="_blank">${escapeHtml(ref)}</a></li>`;
                 });
 
                 html += `</ul>
