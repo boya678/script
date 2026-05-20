@@ -159,11 +159,13 @@ async function readJsonFile(filePath) {
                             Project: args[3],
                             Repository: args[4],
                             Branch: args[5],
-                            TimeStamp: new Date()
+                            TimeStamp: new Date(),
+                            Scope: args[1]
+
                         })
                         if (args[5].includes("develop") || args[5].includes("release") || args[5].includes("master")) {
                             try {
-                                const docId = args[3] + "-" + args[4] + "-" + vul.PkgName.replace(/\//g, "_") + "-" + vul.VulnerabilityID;
+                                const docId = args[3] + "-" + args[4] + "-" + vul.PkgName.replace(/\//g, "_") + "-" + vul.VulnerabilityID + "-" + args[0];
                                 await putRequest("/elastic/trivy/doc/" + docId, datavul);
                             } catch (err) {
                                 console.error(`Error indexando vulnerabilidad ${vul.VulnerabilityID}: ${err.message}`);
@@ -309,7 +311,18 @@ async function main() {
                             "term": {
                                 "Class.keyword": args[6]
                             }
+                        },
+                        {
+                            "term": {
+                                "Branch.keyword": args[5]
+                            }
+                        },
+                        {
+                            "term": {
+                                "Scope.keyword": args[0]
+                            }
                         }
+                        
                     ]
                 }
             }
