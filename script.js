@@ -160,7 +160,7 @@ async function readJsonFile(filePath) {
                             Repository: args[4],
                             Branch: args[5],
                             TimeStamp: new Date(),
-                            Scope: args[1]
+                            Scope: args[0]
 
                         })
                         if (args[5].includes("develop") || args[5].includes("release") || args[5].includes("master")) {
