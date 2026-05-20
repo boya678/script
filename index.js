@@ -16,11 +16,11 @@ function convertXMLToJson(xmlFilePath) {
     return new Promise((resolve, reject) => {
         fs.readFile(xmlFilePath, 'utf-8', (err, xmlData) => {
             if (err) {
-                reject(err);
+                return reject(err);
             }
             xml2js.parseString(xmlData, { explicitArray: false }, (err, result) => {
                 if (err) {
-                    reject(err);
+                    return reject(err);
                 }
                 resolve(result);
             });
@@ -33,7 +33,7 @@ function saveJsonToFile(jsonData, outputFilePath) {
     return new Promise((resolve, reject) => {
         fs.writeFile(outputFilePath, JSON.stringify(jsonData, null, 2), 'utf8', (err) => {
             if (err) {
-                reject(err);
+                return reject(err);
             }
             console.log(`JSON guardado en: ${outputFilePath}`);
             resolve();
@@ -66,8 +66,17 @@ function postJsonToEndpoint(jsonData, path, method) {
             });
 
             res.on('end', () => {
-                resolve(JSON.parse(responseBody));
+                try {
+                    resolve(JSON.parse(responseBody));
+                } catch (e) {
+                    resolve(responseBody);
+                }
             });
+        });
+
+        req.setTimeout(15000, () => {
+            req.destroy();
+            reject(new Error('Elastic request timeout'));
         });
 
         req.on('error', (e) => {
@@ -117,7 +126,9 @@ async function main() {
         //await saveJsonToFile(jsonData, 'resultado.json');  // Especifica la ruta donde quieres guardar el archivo JSON
         // Enviar el JSON mediante POST
         var cont = 0;
-        for (var alertitem of jsonData.OWASPZAPReport.site.alerts.alertitem) {
+        const alertitems = jsonData.OWASPZAPReport.site.alerts.alertitem;
+        const alertitemArray = Array.isArray(alertitems) ? alertitems : [alertitems];
+        for (var alertitem of alertitemArray) {
             var data = null;
             if (Array.isArray(alertitem.instances.instance)) {
                 for (var instance of alertitem.instances.instance) {
@@ -143,7 +154,11 @@ async function main() {
                         branch: args[2],
                         timestamp: new Date()
                     }
-                    await postJsonToEndpoint(data, "/elastic/owasp/doc/" + generarCadenaAleatoria(128), "PUT");
+                    try {
+                        await postJsonToEndpoint(data, "/elastic/owasp/doc/" + generarCadenaAleatoria(16), "PUT");
+                    } catch (err) {
+                        console.error(`Error indexando alerta ${alertitem.alert}: ${err.message}`);
+                    }
                 }
             }
             else {
@@ -156,7 +171,6 @@ async function main() {
                     confidencedesc: alertitem.confidencedesc,
                     solution: alertitem.solution,
                     alertotherinfo: alertitem.otherinfo,
-                    confidencedesc: alertitem.confidencedesc,
                     reference: alertitem.reference,
                     desc: alertitem.desc,
                     uri: alertitem.instances.instance.uri,
@@ -170,7 +184,11 @@ async function main() {
                     branch: args[2],
                     timestamp: new Date()
                 }
-                await postJsonToEndpoint(data, "/elastic/owasp/doc/" + generarCadenaAleatoria(128),"PUT");
+                try {
+                    await postJsonToEndpoint(data, "/elastic/owasp/doc/" + generarCadenaAleatoria(16), "PUT");
+                } catch (err) {
+                    console.error(`Error indexando alerta ${alertitem.alert}: ${err.message}`);
+                }
             }
         }
         console.log(cont)
