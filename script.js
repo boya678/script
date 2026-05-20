@@ -9,82 +9,56 @@ function wait(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-async function putRequest(path, data, callback) {
-    const options = {
-        hostname: process.env.URL_ELASTIC,
-        path: path,
-        method: 'PUT',
-        port: 80,
-        headers: {
-            'Content-Type': 'application/json',
-            'Content-Length': Buffer.byteLength(data),
-            "Authorization": "Basic " + process.env.AUTH_ELASTIC,
-        }
-    };
+function putRequest(path, data) {
+    return new Promise((resolve, reject) => {
+        const options = {
+            hostname: process.env.URL_ELASTIC,
+            path: path,
+            method: 'PUT',
+            port: 80,
+            headers: {
+                'Content-Type': 'application/json',
+                'Content-Length': Buffer.byteLength(data),
+                "Authorization": "Basic " + process.env.AUTH_ELASTIC,
+            }
+        };
 
-    const req = http.request(options, (res) => {
-        let responseData = '';
-
-        // Recibir los datos en fragmentos
-        res.on('data', (chunk) => {
-            responseData += chunk;
+        const req = http.request(options, (res) => {
+            let responseData = '';
+            res.on('data', (chunk) => { responseData += chunk; });
+            res.on('end', () => { resolve(responseData); });
         });
 
-        // Al finalizar la respuesta
-        res.on('end', () => {
-            callback(null, responseData);
-        });
+        req.on('error', (e) => { reject(e); });
+        req.write(data);
+        req.end();
     });
-
-    // Manejar los errores
-    req.on('error', (e) => {
-        callback(e);
-    });
-
-    // Escribir los datos en el cuerpo de la solicitud
-    req.write(data);
-
-    // Finalizar la solicitud
-    req.end();
 }
 
-async function postRequest(path, data, callback) {
-    const options = {
-        hostname: process.env.URL_ELASTIC,
-        path: path,
-        method: 'POST',
-        port: 80,
-        headers: {
-            'Content-Type': 'application/json',
-            'Content-Length': Buffer.byteLength(data),
-            "Authorization": "Basic " + process.env.AUTH_ELASTIC,
-        }
-    };
+function postRequest(path, data) {
+    return new Promise((resolve, reject) => {
+        const options = {
+            hostname: process.env.URL_ELASTIC,
+            path: path,
+            method: 'POST',
+            port: 80,
+            headers: {
+                'Content-Type': 'application/json',
+                'Content-Length': Buffer.byteLength(data),
+                "Authorization": "Basic " + process.env.AUTH_ELASTIC,
+            }
+        };
 
-    const req = http.request(options, (res) => {
-        let responseData = '';
-
-        // Recibir los datos en fragmentos
-        res.on('data', (chunk) => {
-            responseData += chunk;
+        const req = http.request(options, (res) => {
+            let responseData = '';
+            res.on('data', (chunk) => { responseData += chunk; });
+            res.on('end', () => { resolve(responseData); });
         });
 
-        // Al finalizar la respuesta
-        res.on('end', () => {
-            callback(null, responseData);
-        });
+        req.on('error', (e) => { reject(e); });
+        req.write(data);
+        req.end();
     });
-
-    // Manejar los errores
-    req.on('error', (e) => {
-        callback(e);
-    });
-
-    // Escribir los datos en el cuerpo de la solicitud
-    req.write(data);
-
-    // Finalizar la solicitud
-    req.end();
 }
 
 async function fetchCveData(cveId) {
@@ -115,6 +89,11 @@ async function fetchCveData(cveId) {
             });
         });
 
+        req.setTimeout(15000, () => {
+            req.destroy();
+            reject(new Error('NVD API request timeout'));
+        });
+
         req.on('error', (error) => {
             reject(`Request error: ${error.message}`);
         });
@@ -139,7 +118,7 @@ async function readJsonFile(filePath) {
                         try {
                             nvd = await fetchCveData(vul.VulnerabilityID);
 
-                            await wait(0);
+                            await wait(600);
                             var metric = nvd.vulnerabilities[0].cve.metrics
                             if (metric.hasOwnProperty('cvssMetricV31')) {
                                 vul.ExploitScore = metric.cvssMetricV31[0].exploitabilityScore
@@ -156,7 +135,7 @@ async function readJsonFile(filePath) {
                             console.log(error)
                             console.log(nvd)
                         }
-                        if (!vul.ExploitScore == "not found" && !vul.Severity == "CRITICAL") {
+                        if (vul.ExploitScore !== "not found" && vul.Severity !== "CRITICAL") {
                             if (vul.ExploitScore >= 7) {
                                 vul.Red = true
                             }
@@ -182,13 +161,11 @@ async function readJsonFile(filePath) {
                             Branch: args[5],
                             TimeStamp: new Date()
                         })
-                        await putRequest("/elastic/trivy/doc/" + args[3] + "-" + args[4] + "-" + JSON.parse(datavul).VulnerabilityID, datavul, (err, res) => {
-                            if (err) {
-                                //console.error(`Error: ${err.message}`);
-                            } else {
-                                //console.log('Respuesta del servidor:', res);
-                            }
-                        });
+                        try {
+                            await putRequest("/elastic/trivy/doc/" + args[3] + "-" + args[4] + "-" + JSON.parse(datavul).VulnerabilityID, datavul);
+                        } catch (err) {
+                            console.error(`Error indexando vulnerabilidad ${vul.VulnerabilityID}: ${err.message}`);
+                        }
 
                     } catch (error) {
                         console.error('Error al obtener los datos:', error);
@@ -336,13 +313,12 @@ async function main() {
 
         })
         console.log(datadelete)
-        await postRequest("/elastic/trivy/_delete_by_query", datadelete, (err, res) => {
-            if (err) {
-                //console.error(`Error: ${err.message}`);
-            } else {
-                console.log('Respuesta del servidor en borrado:', res);
-            }
-        });
+        try {
+            const resDelete = await postRequest("/elastic/trivy/_delete_by_query", datadelete);
+            console.log('Respuesta del servidor en borrado:', resDelete);
+        } catch (err) {
+            console.error(`Error en borrado: ${err.message}`);
+        }
     }
 
     const jsonFilePath = path.join(__dirname, args[0] + "/" + args[1]); // Ruta del archivo JSON
