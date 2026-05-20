@@ -110,14 +110,18 @@ async function readJsonFile(filePath) {
         var nvd
         var datajson = JSON.parse(data)
         const url = 'https://services.nvd.nist.gov/rest/json/cves/2.0?cveId=';
+        const totalResults = datajson.Results.reduce((acc, r) => acc + (r.Vulnerabilities ? r.Vulnerabilities.length : 0), 0);
+        console.log(`[INFO] Iniciando procesamiento: ${datajson.Results.length} target(s), ${totalResults} vulnerabilidad(es) en total`);
         for (var result of datajson.Results) {
+            console.log(`[TARGET] ${result.Target || '(sin target)'} | Type: ${result.Type || '-'}`);
             try {
                 for (var vul of result.Vulnerabilities) {
                     vul.Red = false
                     try {
                         if (typeof vul.ExploitScore === 'number') {
-                            console.log("ExploitScore ya existe para " + vul.VulnerabilityID + ": " + vul.ExploitScore + ", omitiendo NVD")
+                            console.log(`  [SKIP NVD] ${vul.VulnerabilityID} | ExploitScore ya en JSON: ${vul.ExploitScore}`)
                         } else {
+                            console.log(`  [NVD] Consultando ${vul.VulnerabilityID}...`)
                             try {
                                 nvd = await fetchCveData(vul.VulnerabilityID);
 
@@ -125,18 +129,20 @@ async function readJsonFile(filePath) {
                                 var metric = nvd.vulnerabilities[0].cve.metrics
                                 if (metric.hasOwnProperty('cvssMetricV31')) {
                                     vul.ExploitScore = metric.cvssMetricV31[0].exploitabilityScore
+                                    console.log(`  [NVD OK] ${vul.VulnerabilityID} | ExploitScore (V31): ${vul.ExploitScore}`)
                                 } else if (metric.hasOwnProperty('cvssMetricV30')) {
                                     vul.ExploitScore = metric.cvssMetricV30[0].exploitabilityScore
+                                    console.log(`  [NVD OK] ${vul.VulnerabilityID} | ExploitScore (V30): ${vul.ExploitScore}`)
                                 } else if (metric.hasOwnProperty('cvssMetricV2')) {
                                     vul.ExploitScore = metric.cvssMetricV2[0].exploitabilityScore
+                                    console.log(`  [NVD OK] ${vul.VulnerabilityID} | ExploitScore (V2): ${vul.ExploitScore}`)
                                 } else {
                                     vul.ExploitScore = "not found"
+                                    console.log(`  [NVD] ${vul.VulnerabilityID} | Sin metricas de explotabilidad en NVD`)
                                 }
                             } catch (error) {
                                 vul.ExploitScore = "not found"
-                                console.log("Error obteniendo exploit score para vulnerabilidad: " + vul.VulnerabilityID)
-                                console.log(error)
-                                console.log(nvd)
+                                console.log(`  [NVD ERROR] ${vul.VulnerabilityID} | ${error.message || error}`)
                             }
                         }
                         if (vul.ExploitScore === "not found" && vul.CVSS && Object.keys(vul.CVSS).length > 0) {
@@ -145,14 +151,19 @@ async function readJsonFile(filePath) {
                                 .filter(s => typeof s === 'number');
                             if (scores.length > 0) {
                                 vul.ExploitScore = Math.max(...scores);
+                                console.log(`  [CVSS FALLBACK] ${vul.VulnerabilityID} | ExploitScore desde CVSS Trivy: ${vul.ExploitScore}`)
+                            } else {
+                                console.log(`  [SIN SCORE] ${vul.VulnerabilityID} | Sin ExploitScore en NVD ni CVSS, se indexara como null`)
                             }
                         }
                         if (vul.ExploitScore !== "not found" && vul.Severity !== "CRITICAL") {
                             if (vul.ExploitScore >= 7) {
                                 vul.Red = true
+                                console.log(`  [RED] ${vul.VulnerabilityID} | ExploitScore ${vul.ExploitScore} >= 7 -> marcado como critico`)
                             }
                         } else if (vul.Severity == "CRITICAL") {
                             vul.Red = true
+                            console.log(`  [RED] ${vul.VulnerabilityID} | Severity CRITICAL -> marcado como critico`)
                         }
 
                         const datavul = JSON.stringify({
@@ -179,13 +190,14 @@ async function readJsonFile(filePath) {
                             try {
                                 const docId = args[3] + "-" + args[4] + "-" + vul.PkgName.replace(/\//g, "_") + "-" + vul.VulnerabilityID + "-" + args[0];
                                 await putRequest("/elastic/trivy/doc/" + docId, datavul);
+                                console.log(`  [ELASTIC OK] ${vul.VulnerabilityID} indexado (doc: ${docId})`)
                             } catch (err) {
-                                console.error(`Error indexando vulnerabilidad ${vul.VulnerabilityID}: ${err.message}`);
+                                console.error(`  [ELASTIC ERROR] ${vul.VulnerabilityID} | ${err.message}`);
                             }
                         }
 
                     } catch (error) {
-                        console.error('Error al obtener los datos:', error);
+                        console.error(`  [ERROR] Procesando ${vul.VulnerabilityID}: ${error.message || error}`);
                     }
                     i++;
                 }
@@ -193,6 +205,7 @@ async function readJsonFile(filePath) {
 
             }
         }
+        console.log(`[INFO] Procesamiento finalizado: ${i} vulnerabilidad(es) procesadas`)
         return datajson;
     } catch (error) {
         console.error('Error al leer o parsear el archivo JSON:', error);
