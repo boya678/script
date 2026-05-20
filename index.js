@@ -91,6 +91,7 @@ function postJsonToEndpoint(jsonData, path, method) {
 // Uso de las funciones
 async function main() {
     try {
+        console.log(`[INFO] Leyendo XML: ${args[3]}`)
         const jsonData = await convertXMLToJson(args[3]);  // Reemplaza con la ruta de tu archivo XML
 
 
@@ -118,9 +119,11 @@ async function main() {
             }
         }
 
+        console.log(`[INFO] Eliminando documentos previos en Elastic para project=${args[0]} repo=${args[1]} branch=${args[2]}`)
         console.log(datadelete)
 
-        console.log(await postJsonToEndpoint(datadelete, "/elastic/owasp/_delete_by_query","POST"));
+        const deleteResult = await postJsonToEndpoint(datadelete, "/elastic/owasp/_delete_by_query","POST");
+        console.log(`[INFO] Documentos eliminados: ${deleteResult.deleted ?? JSON.stringify(deleteResult)}`)
 
         // Guardar JSON en un archivo
         //await saveJsonToFile(jsonData, 'resultado.json');  // Especifica la ruta donde quieres guardar el archivo JSON
@@ -128,9 +131,11 @@ async function main() {
         var cont = 0;
         const alertitems = jsonData.OWASPZAPReport.site.alerts.alertitem;
         const alertitemArray = Array.isArray(alertitems) ? alertitems : [alertitems];
+        console.log(`[INFO] Alertas encontradas: ${alertitemArray.length}`);
         for (var alertitem of alertitemArray) {
             var data = null;
             if (Array.isArray(alertitem.instances.instance)) {
+                console.log(`  [ALERTA] "${alertitem.alert}" | riesgo: ${alertitem.riskdesc} | instancias: ${alertitem.instances.instance.length}`);
                 for (var instance of alertitem.instances.instance) {
                     cont++
                     data = {
@@ -156,13 +161,15 @@ async function main() {
                     }
                     try {
                         await postJsonToEndpoint(data, "/elastic/owasp/doc/" + generarCadenaAleatoria(16), "PUT");
+                        console.log(`    [ELASTIC OK] instancia indexada: ${instance.uri}`);
                     } catch (err) {
-                        console.error(`Error indexando alerta ${alertitem.alert}: ${err.message}`);
+                        console.error(`    [ELASTIC ERROR] ${alertitem.alert} | ${instance.uri} | ${err.message}`);
                     }
                 }
             }
             else {
                 cont++
+                console.log(`  [ALERTA] "${alertitem.alert}" | riesgo: ${alertitem.riskdesc} | instancias: 1`);
                 data = {
                     alert: alertitem.alert,
                     riskcode: alertitem.riskcode,
@@ -186,12 +193,13 @@ async function main() {
                 }
                 try {
                     await postJsonToEndpoint(data, "/elastic/owasp/doc/" + generarCadenaAleatoria(16), "PUT");
+                    console.log(`    [ELASTIC OK] instancia indexada: ${alertitem.instances.instance.uri}`);
                 } catch (err) {
-                    console.error(`Error indexando alerta ${alertitem.alert}: ${err.message}`);
+                    console.error(`    [ELASTIC ERROR] ${alertitem.alert} | ${alertitem.instances.instance.uri} | ${err.message}`);
                 }
             }
         }
-        console.log(cont)
+        console.log(`[INFO] Procesamiento finalizado: ${cont} instancia(s) indexadas de ${alertitemArray.length} alerta(s)`)
     } catch (error) {
         console.error('Error:', error);
     }
