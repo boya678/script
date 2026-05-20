@@ -135,6 +135,14 @@ async function readJsonFile(filePath) {
                             console.log(error)
                             console.log(nvd)
                         }
+                        if (vul.ExploitScore === "not found" && vul.CVSS && Object.keys(vul.CVSS).length > 0) {
+                            const scores = Object.values(vul.CVSS)
+                                .map(s => s.V3Score)
+                                .filter(s => typeof s === 'number');
+                            if (scores.length > 0) {
+                                vul.ExploitScore = Math.max(...scores);
+                            }
+                        }
                         if (vul.ExploitScore !== "not found" && vul.Severity !== "CRITICAL") {
                             if (vul.ExploitScore >= 7) {
                                 vul.Red = true
@@ -149,7 +157,7 @@ async function readJsonFile(filePath) {
                             Type: result.Type,
                             Class: result.Class,
                             Target: result.Target,
-                            ExploitScore: vul.ExploitScore,
+                            ExploitScore: vul.ExploitScore === "not found" ? null : vul.ExploitScore,
                             PkgName: vul.PkgName,
                             InstalledVersion: vul.InstalledVersion,
                             FixedVersion: vul.FixedVersion,
