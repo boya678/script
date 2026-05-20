@@ -229,8 +229,9 @@ function convertJsonToHtml(jsonData) {
         </thead>
         <tbody>`;
     for (var results of jsonData.Results) {
-        try {
-            results.Vulnerabilities.forEach(vul => {
+        if (!results.Vulnerabilities) continue;
+        results.Vulnerabilities.forEach(vul => {
+            try {
                 if (vul.Red) {
                     html += `
                     <tr class="error">
@@ -255,17 +256,17 @@ function convertJsonToHtml(jsonData) {
                 <td>${vul.Description}</td>
                 <td>
                     <ul>`;
-                vul.References.forEach(ref => {
+                (vul.References || []).forEach(ref => {
                     html += `<li><a href="${ref}" target="_blank">${ref}</a></li>`;
                 });
 
                 html += `</ul>
                 </td>
             </tr>`;
-            });
-        } catch (error) {
-
-        }
+            } catch (error) {
+                console.error(`Error generando HTML para ${vul.VulnerabilityID} (${vul.PkgID}): ${error.message}`);
+            }
+        });
     }
     html += `
         </tbody>
