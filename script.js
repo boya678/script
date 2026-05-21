@@ -328,6 +328,7 @@ async function saveHtmlFile(filePath, htmlContent, jsonFilePath, jsonData) {
 // Función principal
 async function main() {
     var throwexception = false
+    console.log(`[ARGS] ${JSON.stringify(args)}`);
     if (!args[0] || !args[1] || !args[3] || !args[4] || !args[5] || !args[6]) {
         return;
     }
