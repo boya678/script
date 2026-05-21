@@ -191,7 +191,7 @@ async function readJsonFile(filePath) {
                             try {
                                 const docId = args[3] + "-" + args[4] + "-" + vul.PkgName.replace(/\//g, "_") + "-" + vul.VulnerabilityID + "-" + args[0];
                                 uniqueDocIds.add(docId);
-                                await putRequest("/elastic/trivy"+args[5]+"/doc/" + docId, datavul);
+                                await putRequest("/elastic/trivy/doc/" + docId, datavul);
                                 console.log(`  [ELASTIC OK] ${vul.VulnerabilityID} indexado (doc: ${docId})`)
                             } catch (err) {
                                 console.error(`  [ELASTIC ERROR] ${vul.VulnerabilityID} | ${err.message}`);
@@ -371,7 +371,7 @@ async function main() {
         })
         console.log(datadelete)
         try {
-            const resDelete = await postRequest("/elastic/trivy"+args[5]+"/_delete_by_query", datadelete);
+            const resDelete = await postRequest("/elastic/trivy/_delete_by_query", datadelete);
             console.log('Respuesta del servidor en borrado:', resDelete);
         } catch (err) {
             console.error(`Error en borrado: ${err.message}`);
