@@ -189,7 +189,7 @@ async function readJsonFile(filePath) {
                         })
                         if (args[5].includes("develop") || args[5].includes("release") || args[5].includes("master")) {
                             try {
-                                const docId = args[3] + "-" + args[4] + "-" + vul.PkgName.replace(/\//g, "_") + "-" + vul.VulnerabilityID + "-" + args[0];
+                                const docId = args[3] + "-" + args[4] + "-" + vul.PkgName.replace(/\//g, "_") + "-" + vul.VulnerabilityID + "-" + args[0] + "-" + args[5];
                                 uniqueDocIds.add(docId);
                                 await putRequest("/elastic/trivy/doc/" + docId, datavul);
                                 console.log(`  [ELASTIC OK] ${vul.VulnerabilityID} indexado (doc: ${docId})`)
