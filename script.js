@@ -328,6 +328,9 @@ async function saveHtmlFile(filePath, htmlContent, jsonFilePath, jsonData) {
 // Función principal
 async function main() {
     var throwexception = false
+    if (!args[0] || !args[1] || !args[3] || !args[4] || !args[5] || !args[6]) {
+        return;
+    }
     if (args[5].includes("develop") || args[5].includes("release") || args[5].includes("master")) {
         var datadelete = JSON.stringify({
 
